@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>HCI Mock Test</title>
+
+<style>
+body {
+    font-family: Arial;
+    background: #f4f6f9;
+    margin: 0;
+    padding: 20px;
+}
+
+.container {
+    max-width: 900px;
+    margin: auto;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+h1 {
+    text-align: center;
+}
+
+.question {
+    margin-bottom: 20px;
+    padding: 15px;
+    border-radius: 8px;
+    background: #fafafa;
+}
+
+.options label {
+    display: block;
+    margin: 5px 0;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    background: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #45a049;
+}
+
+.correct {
+    color: green;
+}
+
+.wrong {
+    color: red;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+<h1>HCI Mock Test (60 Questions)</h1>
+
+<form id="quizForm"></form>
+
+<button onclick="submitQuiz()">Submit</button>
+
+<div id="result"></div>
+</div>
+
+<script>
+
+const questions = [
+/* WEEK 1 */
+{
+q: "1. What is the primary goal of Human-Computer Interaction (HCI)?",
+o: ["A) Improve computer hardware","B) Make interaction effective, efficient, and satisfying","C) Reduce data usage","D) Teach programming"],
+a: "B"
+},
+{
+q: "2. Which example represents bad design?",
+o: ["A) A door with a clear push/pull label","B) A TV remote with too many buttons","C) A phone with customizable themes","D) A book with a table of contents"],
+a: "B"
+},
+{
+q: "3. Usability mainly describes:",
+o: ["A) App color scheme","B) How easily users achieve their goals","C) Internet speed","D) Type of hardware"],
+a: "B"
+},
+{
+q: "4. Which of the following is an interactive system?",
+o: ["A) Printed map","B) Digital ATM touch interface","C) Wall poster","D) Paper calendar"],
+a: "B"
+},
+{
+q: "5. Why is understanding user needs important in user-centered design?",
+o: ["A) To reduce app cost","B) To match designs with real user behaviors","C) To create fancy animations","D) To increase marketing budget"],
+a: "B"
+},
+{
+q: "6. Why is a door without signifiers (push/pull marks) confusing?",
+o: ["A) It has too much color","B) It uses expensive material","C) Its affordance and signifiers are unclear","D) It is automatic"],
+a: "C"
+},
+{
+q: "7. What makes a TV remote with many buttons a poor design example?",
+o: ["A) It is heavy","B) Battery drains quickly","C) Cognitive overload and poor usability","D) It is not colorful"],
+a: "C"
+},
+{
+q: "8. Which step in user-centered design involves understanding user challenges and context?",
+o: ["A) Advertising","B) Deployment","C) User research","D) Coding"],
+a: "C"
+},
+{
+q: "9. Which HCI principle was violated in the Boeing 737 MAX case?",
+o: ["A) Too many UI colors","B) No touchscreen support","C) Lack of visibility and poor feedback for automation","D) Icons were too small"],
+a: "C"
+},
+{
+q: "10. Which concept explains why users make errors when controls do not match their mental model?",
+o: ["A) Animation design","B) Aesthetic layout","C) Mental models and signifiers","D) Download speed"],
+a: "C"
+},
+
+/* WEEK 2 */
+{
+q: "11. According to Henry Dreyfuss’s idea of design, when does a designer succeed?",
+o: ["A) When the product uses the latest technology","B) When users feel comfortable and can use the product without friction","C) When the product is inexpensive","D) When the product looks stylish"],
+a: "B"
+},
+{
+q: "12. What was a major reason for the commercial failure of Google Glass?",
+o: ["A) No camera support","B) Privacy concerns and awkward design","C) Low screen brightness","D) Lack of wireless connectivity"],
+a: "B"
+},
+{
+q: "13. What is the first step in deciding what to design?",
+o: ["A) Finalizing the brand logo","B) Identifying who the users are","C) Choosing color schemes","D) Deciding the marketing plan"],
+a: "B"
+},
+{
+q: "14. What is the main goal of interaction design according to Sharp, Rogers, and Preece?",
+o: ["A) Supporting communication and interaction in daily life","B) Reducing manufacturing costs","C) Increasing screen brightness","D) Designing for entertainment"],
+a: "A"
+},
+{
+q: "15. Which of the following best represents User Experience (UX)?",
+o: ["A) How users feel emotionally while using the product","B) The processor speed of a device","C) Only the visual layout","D) The number of features in an app"],
+a: "A"
+},
+{
+q: "16. Why are multidisciplinary teams valuable in interaction design?",
+o: ["A) They reduce the cost of development","B) They make meetings shorter","C) They generate diverse ideas and perspectives","D) They eliminate the need for user testing"],
+a: "C"
+},
+{
+q: "17. What is inclusivity in design?",
+o: ["A) Making interfaces look colorful","B) Designing products for diverse user needs and backgrounds","C) Removing advanced features","D) Designing only for expert users"],
+a: "B"
+},
+{
+q: "18. What is accessibility mainly focused on?",
+o: ["A) Increasing entertainment content","B) Improving device speed","C) Making products usable by people with disabilities","D) Reducing UI animations"],
+a: "C"
+},
+{
+q: "19. Which design principle ensures that crucial functions are easy to locate?",
+o: ["A) Memorability","B) Flexibility","C) Aesthetics","D) Visibility"],
+a: "D"
+},
+{
+q: "20. What is affordance in design?",
+o: ["A) The cost of the product","B) Visual cues that indicate how an element should be used","C) The brand reputation","D) The color contrast ratio"],
+a: "B"
+},
+
+/* WEEK 3 */
+{
+q: "21. Which stage of Design Thinking focuses on understanding the user’s needs and behaviors?",
+o: ["A) Prototype","B) Empathize","C) Test","D) Implement"],
+a: "B"
+},
+{
+q: "22. The Double Diamond design process was developed by:",
+o: ["A) Apple","B) Nielsen Norman Group","C) UK Design Council","D) Microsoft Research"],
+a: "C"
+},
+{
+q: "23. Which of the following is not one of the six stages of Design Thinking?",
+o: ["A) Define","B) Ideate","C) Evaluate","D) Empathize"],
+a: "C"
+},
+{
+q: "24. In the Define stage, the key goal is to:",
+o: ["A) Sketch wireframes","B) Frame the problem clearly","C) Conduct A/B testing","D) Create high-fidelity prototypes"],
+a: "B"
+},
+{
+q: "25. Activity-centered design primarily focuses on:",
+o: ["A) User preferences","B) User emotions","C) Tasks and activities users perform","D) Visual layout aesthetics"],
+a: "C"
+},
+{
+q: "26. Which of the following is not a key component of system design?",
+o: ["A) Data Management","B) Interfaces","C) Memory recall","D) Architecture"],
+a: "C"
+},
+{
+q: "27. The Interaction Design Process emphasizes four basic activities. Which one of these is included?",
+o: ["A) Monetization","B) Discovering requirements","C) Branding","D) Advertising"],
+a: "B"
+},
+{
+q: "28. Genius design relies heavily on:",
+o: ["A) Extensive user testing","B) Designer intuition and expertise","C) Market surveys","D) Accessibility guidelines"],
+a: "B"
+},
+{
+q: "29. Which lifecycle model is based on rapid prototyping and iteration within 5 days?",
+o: ["A) Research in the Wild","B) Waterfall Model","C) Google Design Sprints","D) Spiral Model"],
+a: "C"
+},
+{
+q: "30. According to Week 3, user involvement is important because:",
+o: ["A) It helps reduce the app size","B) Users can become stakeholders and contribute feedback","C) It speeds up coding","D) It avoids the need for iteration"],
+a: "B"
+},
+
+/* WEEK 4 */
+{
+q: "31. User perspectives in HCI help designers understand:",
+o: ["A) Only the visual UI layout","B) How users perceive and interact with technology","C) How designers communicate with developers","D) Only system requirements"],
+a: "B"
+},
+{
+q: "32. Which of the following is an example of accessibility consideration?",
+o: ["A) Using bright colors only","B) Providing adjustable font sizes and dyslexia-friendly modes","C) Adding decorative animations","D) Increasing advertisements"],
+a: "B"
+},
+{
+q: "33. Novice users generally prefer:",
+o: ["A) Only voice-based interfaces","B) Highly customizable and complex interfaces","C) Minimal guidance and advanced shortcuts","D) Simple interfaces with clear instructions"],
+a: "D"
+},
+{
+q: "34. A persona is best described as:",
+o: ["A) A real user hired by the company","B) A fictional, data-driven representation of a user","C) A system architecture model","D) A marketing campaign tool"],
+a: "B"
+},
+{
+q: "35. Surveys in user research are useful because they:",
+o: ["A) Always provide emotional depth","B) Allow quick collection of large-scale data","C) Guarantee unbiased answers","D) Replace interviews completely"],
+a: "B"
+},
+{
+q: "36. Empathy mapping categorizes insights into:",
+o: ["A) Features, modules, layouts, workflows","B) Says, Thinks, Does, Feels","C) Inputs, outputs, processes, storage","D) Goals, sub-goals, errors, feedback"],
+a: "B"
+},
+{
+q: "37. A common challenge in user perspectives is:",
+o: ["A) Too many designers","B) Conflicting needs among different user groups","C) Unlimited research time","D) Lack of design tools"],
+a: "B"
+},
+{
+q: "38. Affinity mapping is mainly used to:",
+o: ["A) Assign tasks to team members","B) Organize qualitative data into themes","C) Remove unnecessary system features","D) Design UI wireframes"],
+a: "B"
+},
+{
+q: "39. A POV (Point of View) statement includes:",
+o: ["A) System hardware requirements","B) User, need, and insight","C) UI color preferences","D) Coding-level issues"],
+a: "B"
+},
+{
+q: "40. Data clustering helps in:",
+o: ["A) Grouping users based on similar behaviors","B) Randomly distributing users","C) Increasing device performance","D) Removing prototypes"],
+a: "A"
+},
+
+/* WEEK 5 */
+{
+q: "41. Which of the following best describes a conceptual model?",
+o: ["A) A detailed UI layout","B) A mental representation of how a system works","C) A list of system requirements","D) A coding guideline document"],
+a: "B"
+},
+{
+q: "42. What is an example of an assumption in interface design?",
+o: ["A) Testing a prototype with users","B) Taking something for granted without evidence","C) Mapping user journeys","D) Writing code before wireframes"],
+a: "B"
+},
+{
+q: "43. Which component is commonly used in online shopping conceptual models?",
+o: ["A) Homepage wallpaper","B) Shopping cart","C) Video playback controls","D) Battery indicator"],
+a: "B"
+},
+{
+q: "44. Interface metaphors help users by:",
+o: ["A) Making systems slower","B) Increasing hardware complexity","C) Leveraging familiarity for learning new systems","D) Removing the need for feedback"],
+a: "C"
+},
+{
+q: "45. Which cognitive principle states that decision time increases with more choices?",
+o: ["A) Miller’s Law","B) Fitts’s Law","C) Hick’s Law","D) Gestalt Law of Proximity"],
+a: "C"
+},
+{
+q: "46. What is the purpose of a system image?",
+o: ["A) To describe internal code structure","B) To show how the system actually works through the interface","C) To explain marketing strategy","D) To define business revenue"],
+a: "B"
+},
+{
+q: "47. Which of the following is a drawback of interface metaphors?",
+o: ["A) They always reduce cognitive load","B) They break all cultural norms","C) They may limit designers’ creativity","D) They remove the need for conceptual models"],
+a: "C"
+},
+{
+q: "48. Cognitive load increases when:",
+o: ["A) Interfaces use familiar patterns","B) Users see excessive irrelevant information","C) Steps are minimized","D) Icons are consistent"],
+a: "B"
+},
+{
+q: "49. Which cognitive aspect focuses on how users perceive visual elements?",
+o: ["A) Decision-making","B) Perception","C) Problem-solving","D) Reflective cognition"],
+a: "B"
+},
+{
+q: "50. Which emerging trend in interfaces directly uses the human brain for input?",
+o: ["A) AR overlays","B) Voice interaction","C) Brain–Computer Interfaces","D) Card-based UI"],
+a: "C"
+},
+
+/* WEEK 6 */
+{
+q: "51. What is the primary purpose of identifying data requirements in HCI?",
+o: ["A) To create marketing campaigns","B) To determine what information is needed to inform design decisions","C) To reduce memory usage in applications","D) To choose programming languages"],
+a: "B"
+},
+{
+q: "52. Which type of data includes demographics and user preferences?",
+o: ["A) System data","B) User data","C) Context data","D) Task data"],
+a: "B"
+},
+{
+q: "53. Which of the following is a qualitative data-gathering technique?",
+o: ["A) Analytics logs","B) Surveys with multiple-choice questions","C) User interviews","D) System performance metrics"],
+a: "C"
+},
+{
+q: "54. Crowdsourcing in HCI is mainly beneficial because:",
+o: ["A) It reduces the need for user testing","B) It gathers data from diverse and large populations","C) It guarantees unbiased data automatically","D) It eliminates qualitative research"],
+a: "B"
+},
+{
+q: "55. Fairness in data collection ensures that:",
+o: ["A) All users are treated equitably in data and algorithms","B) The system runs faster","C) Participants cannot withdraw","D) Only expert users are included"],
+a: "A"
+},
+{
+q: "56. Field studies involve:",
+o: ["A) Observing users in controlled lab settings","B) Recording system logs only","C) Observing users in their natural environment","D) Removing outliers from datasets"],
+a: "C"
+},
+{
+q: "57. Which tool is commonly used for real-time data handling?",
+o: ["A) Tableau","B) Firebase","C) NVivo","D) SPSS"],
+a: "B"
+},
+{
+q: "58. Which of the following is a key issue in data ethics?",
+o: ["A) Increasing app performance","B) User interface color selection","C) Transparency in how data is collected and used","D) Adding more user features"],
+a: "C"
+},
+{
+q: "59. Inter-Annotator Agreement (IAA) is used to:",
+o: ["A) Visualize data using graphs","B) Measure consistency among multiple annotators","C) Improve system performance","D) Replace manual labeling"],
+a: "B"
+},
+{
+q: "60. Which statistical method is used to find relationships between variables?",
+o: ["A) Affinity mapping","B) Regression analysis","C) Unstructured interviewing","D) Card sorting"],
+a: "B"
+}
+];
+
+const form = document.getElementById("quizForm");
+
+questions.forEach((q, index) => {
+    let div = document.createElement("div");
+    div.classList.add("question");
+
+    div.innerHTML = `<p>${q.q}</p>`;
+
+    q.o.forEach(opt => {
+        div.innerHTML += `
+        <div class="options">
+            <label>
+                <input type="radio" name="q${index}" value="${opt[0]}"> ${opt}
+            </label>
+        </div>`;
+    });
+
+    form.appendChild(div);
+});
+
+function submitQuiz() {
+    let score = 0;
+    let resultHTML = "";
+
+    questions.forEach((q, index) => {
+        let selected = document.querySelector(`input[name="q${index}"]:checked`);
+        
+        if (selected && selected.value === q.a) {
+            score++;
+        } else {
+            resultHTML += `<p class="wrong">${q.q}<br>Correct Answer: ${q.a}</p>`;
+        }
+    });
+
+    resultHTML = `<h2>Score: ${score} / 60</h2>` + resultHTML;
+    document.getElementById("result").innerHTML = resultHTML;
+}
+
+</script>
+
+</body>
+</html>
