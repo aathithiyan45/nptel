@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>HCI Mock Test 2</title>
+
+<style>
+body {
+    font-family: Arial;
+    background: #f4f6f9;
+    padding: 20px;
+}
+h1 {
+    text-align: center;
+}
+.question {
+    background: white;
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+.correct { border-left: 5px solid green; }
+.wrong { border-left: 5px solid red; }
+button {
+    padding: 12px 25px;
+    font-size: 16px;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+#result {
+    margin-top: 20px;
+    font-size: 22px;
+    text-align: center;
+}
+.correctText { color: green; }
+</style>
+
+</head>
+<body>
+
+<h1>HCI Mock Exam 2</h1>
+
+<form id="quizForm"></form>
+
+<div style="text-align:center;">
+    <button type="button" onclick="submitQuiz()">Submit</button>
+</div>
+
+<div id="result"></div>
+
+<script>
+
+const questions = [
+
+{q:"1. What is the primary focus of Human-Computer Interaction (HCI)?",
+options:["A) Developing advanced computer hardware.",
+"B) Understanding and improving the relationship between humans and digital systems.",
+"C) Optimizing network protocols for faster data transfer.",
+"D) Programming artificial intelligence for autonomous tasks."],
+answer:"B) Understanding and improving the relationship between humans and digital systems."},
+
+{q:"2. In the case study presented, how was keystroke dynamics primarily used?",
+options:["A) To improve typing speed for users.",
+"B) To analyze the rhythm and pattern of typing for identity verification or detecting academic dishonesty.",
+"C) To predict the next word a user would type.",
+"D) To encrypt typed data for security purposes."],
+answer:"B) To analyze the rhythm and pattern of typing for identity verification or detecting academic dishonesty."},
+
+{q:"3. According to the lecture, which concept focuses on how effectively a user can achieve their goals with a product, measured by efficiency, effectiveness, learnability, memorability, and satisfaction?",
+options:["A) User Experience (UX)",
+"B) Interaction Design (IxD)",
+"C) Usability",
+"D) Human-Centered Design (UCD)"],
+answer:"C) Usability"},
+
+{q:"4. Which of the following is NOT explicitly mentioned as a step in the Human-Centered Design Process?",
+options:["A) User Research",
+"B) Ideation",
+"C) Prototyping",
+"D) Marketing"],
+answer:"D) Marketing"},
+
+{q:"5. What is the primary significance of creating a Persona in an HCI project?",
+options:["A) To define the technical specifications of the product.",
+"B) To foster empathy and keep the design process user-centered.",
+"C) To outline the project budget and timeline.",
+"D) To map out the visual aesthetics of the interface."],
+answer:"B) To foster empathy and keep the design process user-centered."},
+
+{q:"6. Which type of prototype is described as a basic, often hand-drawn, sketch or wireframe of the product's layout and structure, used for rapid, low-cost exploration of ideas?",
+options:["A) High-Fidelity (Hi-Fi) Prototype",
+"B) Mid-Fidelity (Mid-Fi) Prototype",
+"C) Low-Fidelity (Lo-Fi) Prototype",
+"D) Functional Prototype"],
+answer:"C) Low-Fidelity (Lo-Fi) Prototype"},
+
+{q:"7. The 'Norman Door' is cited as an example of bad design because it:",
+options:["A) Is too expensive to manufacture.",
+"B) Lacks clear signifiers, creating a conflict between intuition and function.",
+"C) Breaks down frequently, requiring constant maintenance.",
+"D) Is aesthetically unappealing."],
+answer:"B) Lacks clear signifiers, creating a conflict between intuition and function."},
+
+{q:"8. The discussion about paper vs. plastic straws highlights that design choices often involve:",
+options:["A) Ignoring environmental impact for user convenience.",
+"B) Prioritizing aesthetics over functionality.",
+"C) Trade-offs between immediate user experience and broader ethical/environmental impact.",
+"D) A focus solely on cost-effectiveness."],
+answer:"C) Trade-offs between immediate user experience and broader ethical/environmental impact."},
+
+{q:"9. What is 'emergence' in the context of Large Language Models (LLMs)?",
+options:["A) The ability of an LLM to generate new, never-before-seen data.",
+"B) A phenomenon where quantitative changes in model size lead to qualitative leaps in capability.",
+"C) The process of an LLM learning from real-time user interactions.",
+"D) The sudden appearance of errors in a trained LLM."],
+answer:"B) A phenomenon where quantitative changes in model size lead to qualitative leaps in capability."},
+
+{q:"10. Which prompting technique involves providing a few examples of a task to guide the LLM, enabling 'in-context learning'?",
+options:["A) Zero-Shot Prompting",
+"B) Instruction Prompting",
+"C) Few-Shot Prompting",
+"D) Multimodal Prompting"],
+answer:"C) Few-Shot Prompting"},
+
+{q:"11. What is the primary characteristic of 'Behavior-Optimized Content'?",
+options:["A) It is designed merely for aesthetics.",
+"B) It is specifically designed to elicit a desired behavioral response.",
+"C) It is generated randomly by an LLM.",
+"D) It prioritizes factual accuracy above all else."],
+answer:"B) It is specifically designed to elicit a desired behavioral response."},
+
+{q:"12. The lecture emphasizes that the power to persuade carries a heavy ethical burden. Which of the following is NOT listed as a key ethical consideration?",
+options:["A) Avoiding manipulation",
+"B) Ensuring fairness and non-discrimination",
+"C) Maximizing profit at all costs",
+"D) Protecting user privacy"],
+answer:"C) Maximizing profit at all costs"},
+
+{q:"13. How does Kyron's Advanced Plagiarism Check differentiate itself from traditional text-matching tools?",
+options:["A) It only checks for plagiarism in code.",
+"B) It analyzes keystroke patterns and mouse movements to detect behavioral plagiarism.",
+"C) It requires manual review by a human proctor for every submission.",
+"D) It only works for specific languages."],
+answer:"B) It analyzes keystroke patterns and mouse movements to detect behavioral plagiarism."},
+
+{q:"14. What is a key differentiator of Audino's Hate Speech AI module, particularly relevant for content moderation in India?",
+options:["A) Its ability to generate hate speech for testing.",
+"B) Its specialization in analyzing Indian languages and dialects.",
+"C) Its focus solely on visual hate speech.",
+"D) Its integration with social media platforms for direct removal."],
+answer:"B) Its specialization in analyzing Indian languages and dialects."},
+
+{q:"15. What are 'Dark Patterns' in UI design?",
+options:["A) Design elements that use dark color schemes for aesthetics.",
+"B) UI elements intentionally designed to deceive or trick users into unintended actions.",
+"C) Security features that prevent unauthorized access.",
+"D) Design choices that enhance user privacy."],
+answer:"B) UI elements intentionally designed to deceive or trick users into unintended actions."},
+
+{q:"16. Why is Explainable AI (XAI) considered essential for building user trust in critical applications?",
+options:["A) It allows AI systems to make decisions faster.",
+"B) It provides transparent, interpretable outputs to help users understand AI's decision-making.",
+"C) It reduces the computational cost of AI models.",
+"D) It enables AI to learn without human supervision."],
+answer:"B) It provides transparent, interpretable outputs to help users understand AI's decision-making."},
+
+{q:"17. According to the Shannon-Weaver Model, which level of communication asks 'How effectively does the received meaning affect conduct in a desired way?'",
+options:["A) Technical Problem",
+"B) Semantic Problem",
+"C) Effectiveness Problem",
+"D) Encoding Problem"],
+answer:"C) Effectiveness Problem"},
+
+{q:"18. Which of the following is NOT listed as one of the Four Primary Guiding Principles for Socially Responsible AI?",
+options:["A) Human Welfare and Autonomy First",
+"B) Fairness, Equity, and Inclusivity",
+"C) Maximizing AI autonomy",
+"D) Credibility, Accuracy, and Truthfulness"],
+answer:"C) Maximizing AI autonomy"},
+
+{q:"19. What problem did the MSDL-MCA technique primarily address in the autism diagnosis project?",
+options:["A) The high cost of specialized hardware.",
+"B) The lack of large datasets of Indian children's facial expressions for training.",
+"C) The difficulty in collecting speech data from children.",
+"D) The need for real-time processing of multimodal data."],
+answer:"B) The lack of large datasets of Indian children's facial expressions for training."},
+
+{q:"20. The research found that AI diagnostic models for ASD must be 'linguistically specific'. What was the key evidence for this?",
+options:["A) Children responded better to robots speaking their native language.",
+"B) The most predictive linguistic features differed between Hindi and English.",
+"C) Acoustic features were universally more important than linguistic features.",
+"D) Only English models showed high accuracy."],
+answer:"B) The most predictive linguistic features differed between Hindi and English."},
+
+{q:"21. In the architecture of a conversational agent, which component is responsible for maintaining context and deciding the next action based on the NLU's output?",
+options:["A) Automatic Speech Recognition (ASR)",
+"B) Natural Language Understanding (NLU)",
+"C) Dialogue Management (DM)",
+"D) Natural Language Generation (NLG)"],
+answer:"C) Dialogue Management (DM)"},
+
+{q:"22. What is the primary purpose of a Low-Fidelity (Lo-Fi) prototype in the prototyping progression?",
+options:["A) To create a pixel-perfect visual design.",
+"B) To test core assumptions and visualize concepts quickly at low cost.",
+"C) To provide a clear visual guide for developers.",
+"D) To conduct realistic usability testing with final users."],
+answer:"B) To test core assumptions and visualize concepts quickly at low cost."},
+
+{q:"23. The lecture defines Inclusive Design as a process and Accessibility as an outcome. What does Inclusive Design proactively consider?",
+options:["A) Only the needs of users with disabilities.",
+"B) The full range of human diversity from the outset.",
+"C) The aesthetic appeal of the product for all users.",
+"D) Only the technical feasibility of features."],
+answer:"B) The full range of human diversity from the outset."},
+
+{q:"24. According to the lecture, what is 'friction' in the context of product design?",
+options:["A) A necessary component for engaging user interaction.",
+"B) Any aspect of a product that disrupts, hinders, or creates discomfort in the user's experience.",
+"C) The physical resistance encountered when using a device.",
+"D) A design element that encourages user exploration."],
+answer:"B) Any aspect of a product that disrupts, hinders, or creates discomfort in the user's experience."},
+
+{q:"25. Which design principle states that the quality of an object or design element visually suggests how it is supposed to be used, making the design 'talk for itself'?",
+options:["A) Visibility",
+"B) Feedback",
+"C) Consistency",
+"D) Affordance"],
+answer:"D) Affordance"},
+
+{q:"26. Which design approach focuses on the tasks and activities users perform, prioritizing the efficiency of workflows over individual user preferences?",
+options:["A) User-Centered Design (UCD)",
+"B) Activity-Centered Design (ACD)",
+"C) System Design",
+"D) Genius Design"],
+answer:"B) Activity-Centered Design (ACD)"},
+
+{q:"27. Design Thinking is described as a user-centered, non-linear, and iterative mindset. What is its primary goal?",
+options:["A) To systematically develop and execute a solution.",
+"B) To discover the right problem to solve.",
+"C) To create a polished, user-approved solution.",
+"D) To provide a replicable framework for building solutions."],
+answer:"B) To discover the right problem to solve."},
+
+{q:"28. In the Double Diamond design process model, which two phases are part of the 'Problem Space' (First Diamond)?",
+options:["A) Develop and Deliver",
+"B) Discover and Define",
+"C) Ideate and Prototype",
+"D) Test and Implement"],
+answer:"B) Discover and Define"},
+
+{q:"29. What is the ultimate goal regarding a user's mental model and a designer's conceptual model in successful design?",
+options:["A) To make the conceptual model as complex as possible.",
+"B) To ensure the conceptual model aligns perfectly with the user's mental model.",
+"C) To force the user to adapt to the designer's conceptual model.",
+"D) To ignore the user's mental model in favor of technical innovation."],
+answer:"B) To ensure the conceptual model aligns perfectly with the user's mental model."},
+
+{q:"30. Which of the following is NOT a principle of Direct Manipulation as described in the lecture?",
+options:["A) Continuous visual representation of the object of interest.",
+"B) Physical actions instead of complex syntax.",
+"C) Delayed feedback for user actions.",
+"D) Rapid, reversible actions with immediate visual feedback."],
+answer:"C) Delayed feedback for user actions."}
+
+];
+
+function loadQuiz(){
+    const form = document.getElementById("quizForm");
+
+    questions.forEach((q,i)=>{
+        const div = document.createElement("div");
+        div.className="question";
+
+        div.innerHTML = `<p>${q.q}</p>` +
+        q.options.map(opt =>
+            `<label><input type="radio" name="q${i}" value="${opt}"> ${opt}</label><br>`
+        ).join("");
+
+        form.appendChild(div);
+    });
+}
+
+function submitQuiz(){
+    let score=0;
+    const allQuestions = document.getElementsByClassName("question");
+
+    questions.forEach((q,i)=>{
+        const selected = document.querySelector(`input[name="q${i}"]:checked`);
+        const div = allQuestions[i];
+
+        div.classList.remove("correct","wrong");
+
+        const old = div.querySelector(".correctText");
+        if(old) old.remove();
+
+        if(selected && selected.value===q.answer){
+            score++;
+            div.classList.add("correct");
+        } else {
+            div.classList.add("wrong");
+
+            const p = document.createElement("p");
+            p.className="correctText";
+            p.innerText="Correct Answer: "+q.answer;
+            div.appendChild(p);
+        }
+    });
+
+    document.getElementById("result").innerText = `Score: ${score} / 30`;
+}
+
+loadQuiz();
+
+</script>
+
+</body>
+</html>

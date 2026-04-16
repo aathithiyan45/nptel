@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>HCI Mock Test 3</title>
+
+<style>
+body {
+    font-family: Arial;
+    background: #f4f6f9;
+    padding: 20px;
+}
+h1 {
+    text-align: center;
+}
+.question {
+    background: white;
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+.correct { border-left: 5px solid green; }
+.wrong { border-left: 5px solid red; }
+button {
+    padding: 12px 25px;
+    font-size: 16px;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+#result {
+    margin-top: 20px;
+    font-size: 22px;
+    text-align: center;
+}
+.correctText { color: green; }
+</style>
+
+</head>
+<body>
+
+<h1>HCI Mock Exam 3</h1>
+
+<form id="quizForm"></form>
+
+<div style="text-align:center;">
+    <button type="button" onclick="submitQuiz()">Submit</button>
+</div>
+
+<div id="result"></div>
+
+<script>
+
+const questions = [
+
+{q:"1. What is the primary purpose of Human-Computer Interaction (HCI)?",
+options:["A) To program computers",
+"B) To understand and improve the relationship between humans and digital systems",
+"C) To develop new hardware",
+"D) To analyze network protocols"],
+answer:"B) To understand and improve the relationship between humans and digital systems"},
+
+{q:"2. Keystroke dynamics analyzes what aspect of a person's typing?",
+options:["A) The content of the typed text",
+"B) The rhythm and pattern of typing by capturing key up/down events and timestamps",
+"C) The accuracy of spelling and grammar",
+"D) The speed of typing in words per minute"],
+answer:"B) The rhythm and pattern of typing by capturing key up/down events and timestamps"},
+
+{q:"3. Which design philosophy places the user's needs, capabilities, and limitations at the forefront of the entire design process?",
+options:["A) System-Centered Design",
+"B) Developer-Centric Design",
+"C) User-Centered Design",
+"D) Aesthetic-Driven Design"],
+answer:"C) User-Centered Design"},
+
+{q:"4. According to the lecture, what is the key difference between Usability and User Experience (UX)?",
+options:["A) Usability is about aesthetics, while UX is about functionality.",
+"B) Usability focuses on efficiency and error prevention, while UX encompasses the overall emotional journey and perceptions.",
+"C) Usability is for developers, UX is for designers.",
+"D) Usability is a subset of Interaction Design, UX is a subset of Usability."],
+answer:"B) Usability focuses on efficiency and error prevention, while UX encompasses the overall emotional journey and perceptions."},
+
+{q:"5. The lecture describes a hierarchy for evaluating a user's relationship with a product and brand. Which option correctly orders this hierarchy from foundational to holistic?",
+options:["A) Customer Experience -> User Experience -> Usability",
+"B) Usability -> Customer Experience -> User Experience",
+"C) User Experience -> Usability -> Customer Experience",
+"D) Usability -> User Experience -> Customer Experience"],
+answer:"D) Usability -> User Experience -> Customer Experience"},
+
+{q:"6. What is a 'Persona' in the context of an HCI project?",
+options:["A) A programming language",
+"B) A fictional character representing a key user type",
+"C) A type of software bug",
+"D) A project management tool"],
+answer:"B) A fictional character representing a key user type"},
+
+{q:"7. Which type of prototype is described as a basic, often hand-drawn, sketch or wireframe, primarily used for rapid, low-cost exploration of ideas?",
+options:["A) High-Fidelity Prototype",
+"B) Mid-Fidelity Prototype",
+"C) Low-Fidelity Prototype",
+"D) Functional Prototype"],
+answer:"C) Low-Fidelity Prototype"},
+
+{q:"8. What is a 'Norman Door'?",
+options:["A) A door designed with clear signifiers for pushing or pulling",
+"B) A door that automatically opens when approached",
+"C) A physical design that works against intuition, lacking clear signifiers",
+"D) A door that can only be opened with a keycard"],
+answer:"C) A physical design that works against intuition, lacking clear signifiers"},
+
+{q:"9. The lecture discusses the trade-offs between plastic and paper straws. What is highlighted as the 'massive design flaw' of the plastic straw in a broader context, despite its superior immediate user experience?",
+options:["A) Its high production cost",
+"B) Its negative environmental impact",
+"C) Its tendency to break easily",
+"D) Its inability to be customized"],
+answer:"B) Its negative environmental impact"},
+
+{q:"10. In the context of LLMs, what is 'Emergence'?",
+options:["A) The process of an LLM generating text very quickly",
+"B) A phenomenon where increasing model size and data leads to qualitative leaps in capability",
+"C) The ability of an LLM to learn new languages",
+"D) The initial training phase of an LLM"],
+answer:"B) A phenomenon where increasing model size and data leads to qualitative leaps in capability"},
+
+{q:"11. Which prompting technique involves providing a few examples of the task to steer the LLM, enabling 'in-context learning'?",
+options:["A) Zero-Shot Prompting",
+"B) Instruction Prompting",
+"C) Few-Shot Prompting",
+"D) Chain-of-Thought Prompting"],
+answer:"C) Few-Shot Prompting"},
+
+{q:"12. What is the primary goal of Human-Centered AI (HCAI)?",
+options:["A) To replace human jobs with AI",
+"B) To create AI systems that prioritize human needs, values, and ethics",
+"C) To develop AI that can operate completely autonomously",
+"D) To make AI systems as complex as possible"],
+answer:"B) To create AI systems that prioritize human needs, values, and ethics"},
+
+{q:"13. What does 'Behavior Simulation' in the context of LLM and HCI tutorial refer to?",
+options:["A) Training an LLM to mimic human conversation",
+"B) Using LLMs to predict the behavioral response a piece of content will have on a target audience",
+"C) Creating virtual environments for users to interact with LLMs",
+"D) Analyzing historical user behavior data to improve LLM performance"],
+answer:"B) Using LLMs to predict the behavioral response a piece of content will have on a target audience"},
+
+{q:"14. What is the main purpose of the Kyron platform?",
+options:["A) To generate marketing content",
+"B) To provide remote proctoring for exams and conduct virtual interviews",
+"C) To teach programming skills",
+"D) To analyze social media trends"],
+answer:"B) To provide remote proctoring for exams and conduct virtual interviews"},
+
+{q:"15. How does Kyron's 'Advanced Plagiarism Check' go beyond traditional text-matching software?",
+options:["A) It compares answers across different languages",
+"B) It analyzes a candidate's keystroke patterns and mouse movements to detect behavioral plagiarism",
+"C) It checks for plagiarism in images and videos",
+"D) It uses AI to rewrite plagiarized content"],
+answer:"B) It analyzes a candidate's keystroke patterns and mouse movements to detect behavioral plagiarism"},
+
+{q:"16. What is 'Text-to-Image Generation'?",
+options:["A) Converting images into text descriptions",
+"B) Generating unique visuals based on a user's textual prompt",
+"C) Creating text overlays on existing images",
+"D) Analyzing text within images"],
+answer:"B) Generating unique visuals based on a user's textual prompt"},
+
+{q:"17. What is the primary function of Audino's 'Content AI' vertical?",
+options:["A) To generate new video content from text",
+"B) To make long-form audio/video content accessible through transcription, summarization, and Q&A",
+"C) To detect hate speech in images",
+"D) To create background music for videos"],
+answer:"B) To make long-form audio/video content accessible through transcription, summarization, and Q&A"},
+
+{q:"18. What is 'Privacy by Design'?",
+options:["A) Adding privacy features at the end of development",
+"B) Embedding privacy considerations into the design and architecture of systems from the very beginning",
+"C) Hiding user data from public view",
+"D) Designing systems that collect no user data"],
+answer:"B) Embedding privacy considerations into the design and architecture of systems from the very beginning"},
+
+{q:"19. What are 'Dark Patterns' in UI design?",
+options:["A) User interface elements designed to be aesthetically pleasing",
+"B) UI elements intentionally designed to deceive or trick users into unintended actions",
+"C) Design patterns that use dark color schemes",
+"D) UI elements that are difficult to see in low light"],
+answer:"B) UI elements intentionally designed to deceive or trick users into unintended actions"},
+
+{q:"20. The lecture describes a ChatGPT demo where the system initially refused to provide information on making an atomic bomb but later provided related information when the request was reframed. This highlights which critical HCI security challenge?",
+options:["A) The inability of AI to understand complex scientific concepts",
+"B) The system's vulnerability to social engineering and manipulation through prompts",
+"C) The lack of sufficient training data for sensitive topics",
+"D) The difficulty in distinguishing between harmless and harmful queries"],
+answer:"B) The system's vulnerability to social engineering and manipulation through prompts"},
+
+{q:"21. According to the Shannon-Weaver Model, which level of communication asks 'How effectively does the received meaning affect conduct in a desired way?'",
+options:["A) Technical Problem",
+"B) Semantic Problem",
+"C) Effectiveness Problem",
+"D) Noise Problem"],
+answer:"C) Effectiveness Problem"},
+
+{q:"22. Which of the following is NOT one of the four primary guiding principles for Socially Responsible AI, as outlined in the lecture?",
+options:["A) Human Welfare and Autonomy First",
+"B) Fairness, Equity, and Inclusivity",
+"C) Profit Maximization and Market Dominance",
+"D) Credibility, Accuracy, and Truthfulness"],
+answer:"C) Profit Maximization and Market Dominance"},
+
+{q:"23. What is 'MSDL-MCA' in the context of the Human-Centered AI for Autism Diagnosis project?",
+options:["A) A new diagnostic tool for ASD",
+"B) A technique for multimodal speech analysis",
+"C) A source-free transfer learning technique to build classifiers with scarce data",
+"D) A method for collecting physiological data from children"],
+answer:"C) A source-free transfer learning technique to build classifiers with scarce data"},
+
+{q:"24. The autism diagnosis project found that predictive features for ASD in speech analysis differed between Hindi and English. What key implication did this have for AI diagnostic models?",
+options:["A) AI models are universally applicable across all languages",
+"B) AI diagnostic models must be linguistically specific",
+"C) Only acoustic features are important for speech analysis",
+"D) Semantic features are irrelevant in cross-cultural diagnosis"],
+answer:"B) AI diagnostic models must be linguistically specific"},
+
+{q:"25. Which component of a conversational system is responsible for converting the analog sound waves of your voice into digital text?",
+options:["A) Natural Language Understanding (NLU)",
+"B) Dialogue Management (DM)",
+"C) Automatic Speech Recognition (ASR)",
+"D) Natural Language Generation (NLG)"],
+answer:"C) Automatic Speech Recognition (ASR)"},
+
+{q:"26. What is the definition of 'Friction' in product design?",
+options:["A) A smooth and enjoyable user experience",
+"B) Any aspect of a product that disrupts, hinders, or creates discomfort in the user's experience",
+"C) The aesthetic appeal of a product",
+"D) The physical weight of a product"],
+answer:"B) Any aspect of a product that disrupts, hinders, or creates discomfort in the user's experience"},
+
+{q:"27. Which of the following is NOT one of the core principles of Interaction Design discussed in the lecture?",
+options:["A) Visibility",
+"B) Feedback",
+"C) Constraints",
+"D) Complexity"],
+answer:"D) Complexity"},
+
+{q:"28. What is the primary focus of 'Activity-Centered Design (ACD)'?",
+options:["A) The individual user's preferences",
+"B) The tasks and activities users perform, prioritizing efficiency",
+"C) The aesthetic appeal of the interface",
+"D) The technical architecture of the system"],
+answer:"B) The tasks and activities users perform, prioritizing efficiency"},
+
+{q:"29. The Double Diamond model of the design process consists of four phases. Which option correctly lists these phases in order?",
+options:["A) Define, Discover, Develop, Deliver",
+"B) Discover, Develop, Define, Deliver",
+"C) Discover, Define, Develop, Deliver",
+"D) Develop, Discover, Define, Deliver"],
+answer:"C) Discover, Define, Develop, Deliver"},
+
+{q:"30. What is the primary purpose of 'Prototyping' in the design process?",
+options:["A) To write the final code for the product",
+"B) To create tangible, interactive models for testing and feedback",
+"C) To market the product to potential customers",
+"D) To finalize the visual aesthetics without functionality"],
+answer:"B) To create tangible, interactive models for testing and feedback"}
+
+];
+
+function loadQuiz(){
+    const form = document.getElementById("quizForm");
+
+    questions.forEach((q,i)=>{
+        const div = document.createElement("div");
+        div.className="question";
+
+        div.innerHTML = `<p>${q.q}</p>` +
+        q.options.map(opt =>
+            `<label><input type="radio" name="q${i}" value="${opt}"> ${opt}</label><br>`
+        ).join("");
+
+        form.appendChild(div);
+    });
+}
+
+function submitQuiz(){
+    let score=0;
+    const allQuestions = document.getElementsByClassName("question");
+
+    questions.forEach((q,i)=>{
+        const selected = document.querySelector(`input[name="q${i}"]:checked`);
+        const div = allQuestions[i];
+
+        div.classList.remove("correct","wrong");
+
+        const old = div.querySelector(".correctText");
+        if(old) old.remove();
+
+        if(selected && selected.value===q.answer){
+            score++;
+            div.classList.add("correct");
+        } else {
+            div.classList.add("wrong");
+
+            const p = document.createElement("p");
+            p.className="correctText";
+            p.innerText="Correct Answer: "+q.answer;
+            div.appendChild(p);
+        }
+    });
+
+    document.getElementById("result").innerText = `Score: ${score} / 30`;
+}
+
+loadQuiz();
+
+</script>
+
+</body>
+</html>
