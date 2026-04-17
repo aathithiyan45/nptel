@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>HCI Mock Test 1</title>
+
+<style>
+body {
+    font-family: Arial;
+    background: #f4f6f9;
+    padding: 20px;
+}
+h1 {
+    text-align: center;
+}
+.question {
+    background: white;
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+.correct { border-left: 5px solid green; }
+.wrong { border-left: 5px solid red; }
+button {
+    padding: 12px 25px;
+    font-size: 16px;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+#result {
+    margin-top: 20px;
+    font-size: 22px;
+    text-align: center;
+}
+.correctText { color: green; }
+</style>
+
+</head>
+<body>
+
+<h1>HCI Mock Exam 1</h1>
+
+<form id="quizForm"></form>
+
+<div style="text-align:center;">
+    <button type="button" onclick="submitQuiz()">Submit</button>
+</div>
+
+<div id="result"></div>
+
+<script>
+
+const questions = [
+
+{q:"1. What is the primary focus of Human-Computer Interaction (HCI)?",
+options:["A) The study of computer hardware architecture and performance.",
+"B) The study of how people design, implement, and use interactive computer systems and how computers affect individuals, organizations, and society.",
+"C) The development of new programming languages for artificial intelligence.",
+"D) The analysis of network protocols and data transmission efficiency."],
+answer:"B) The study of how people design, implement, and use interactive computer systems and how computers affect individuals, organizations, and society."},
+
+{q:"2. According to the lecture, what does 'Usability' primarily focus on?",
+options:["A) The overall emotional journey and aesthetics of a product.",
+"B) How effectively a user can achieve their goals with a product, measured by efficiency, effectiveness, learnability, memorability, and satisfaction.",
+"C) The practice of designing the interaction between users and products.",
+"D) The user's holistic perception of the entire brand."],
+answer:"B) How effectively a user can achieve their goals with a product, measured by efficiency, effectiveness, learnability, memorability, and satisfaction."},
+
+{q:"3. What is a Persona in the context of HCI projects?",
+options:["A) A technical specification document for product development.",
+"B) A fictional character created to represent a key user type, complete with goals, needs, and frustrations.",
+"C) A list of all features to be included in the final product.",
+"D) A diagram outlining the system's backend architecture."],
+answer:"B) A fictional character created to represent a key user type, complete with goals, needs, and frustrations."},
+
+{q:"4. The 'Norman Door' is an example of bad design because it lacks what?",
+options:["A) Innovative features.",
+"B) Clear signifiers and creates a conflict between intuition and function.",
+"C) Elegant simplicity.",
+"D) Attention to detail."],
+answer:"B) Clear signifiers and creates a conflict between intuition and function."},
+
+{q:"5. What is a Large Language Model (LLM) primarily characterized by?",
+options:["A) A model that predicts the next word in a sequence based on a small, specific dataset.",
+"B) A language model scaled up with a massive number of parameters and trained on vast, diverse datasets.",
+"C) A model focused exclusively on speech recognition and generation.",
+"D) A model that only processes numerical data and performs calculations."],
+answer:"B) A language model scaled up with a massive number of parameters and trained on vast, diverse datasets."},
+
+{q:"6. What is the primary purpose of the Kyron Platform?",
+options:["A) To generate marketing content using AI.",
+"B) To provide a secure and interactive environment for remote proctoring of exams and conducting virtual interviews.",
+"C) To analyze social media trends and user behavior.",
+"D) To create photorealistic images from text prompts."],
+answer:"B) To provide a secure and interactive environment for remote proctoring of exams and conducting virtual interviews."},
+
+{q:"7. What is the principle of 'Privacy by Design'?",
+options:["A) Adding privacy features as an afterthought to comply with regulations.",
+"B) Embedding privacy considerations into the design and architecture of systems from the very beginning.",
+"C) Relying on users to manage their own privacy settings after product launch.",
+"D) Minimizing data collection only when legally mandated."],
+answer:"B) Embedding privacy considerations into the design and architecture of systems from the very beginning."},
+
+{q:"8. In a conversational AI system, what is the primary function of Automatic Speech Recognition (ASR)?",
+options:["A) To manage the state and flow of the conversation.",
+"B) To convert the analog sound waves of your voice into digital text.",
+"C) To decipher the meaning and intent of a text query.",
+"D) To construct a grammatically correct, natural-sounding sentence."],
+answer:"B) To convert the analog sound waves of your voice into digital text."},
+
+{q:"9. According to the lecture, what is 'Friction' in product design?",
+options:["A) A necessary component for engaging user interaction.",
+"B) Any aspect of a product that disrupts, hinders, or creates discomfort in the user's experience.",
+"C) The visual appeal and aesthetic quality of an interface.",
+"D) The speed at which a user can complete a task."],
+answer:"B) Any aspect of a product that disrupts, hinders, or creates discomfort in the user's experience."},
+
+{q:"10. What is 'Prototyping' in the context of design?",
+options:["A) The final stage of product development before launch.",
+"B) The creation of interactive models or functional representations of a product or system.",
+"C) The process of writing the complete code for an application.",
+"D) The theoretical conceptualization of a product without any tangible representation."],
+answer:"B) The creation of interactive models or functional representations of a product or system."},
+
+{q:"11. Which statement best describes the relationship between Usability and User Experience (UX)?",
+options:["A) Usability and UX are interchangeable terms, meaning the same thing.",
+"B) Usability is the foundational layer focused on task completion, while UX is broader, encompassing the entire emotional journey and perceptions.",
+"C) UX is a subset of Usability, focusing only on aesthetics.",
+"D) Usability is only concerned with advanced features, while UX focuses on basic functionality."],
+answer:"B) Usability is the foundational layer focused on task completion, while UX is broader, encompassing the entire emotional journey and perceptions."},
+
+{q:"12. What is the primary purpose of a Low-Fidelity (Lo-Fi) Prototype?",
+options:["A) To create a visually polished model for stakeholder presentations.",
+"B) To allow for rapid, low-cost exploration of ideas and early validation of the core concept and screen flow.",
+"C) To provide a clear vision for developers with all visual details.",
+"D) To conduct realistic usability testing with final branding."],
+answer:"B) To allow for rapid, low-cost exploration of ideas and early validation of the core concept and screen flow."},
+
+{q:"13. What phenomenon describes the unlocking of new, advanced capabilities in LLMs due to increased scale and data?",
+options:["A) Transfer learning.",
+"B) Emergence.",
+"C) Fine-tuning.",
+"D) Zero-shot prompting."],
+answer:"B) Emergence"},
+
+{q:"14. What are 'Dark Patterns' in UI design?",
+options:["A) Visually appealing dark-themed interfaces.",
+"B) UI elements intentionally designed to deceive or trick users into actions they did not intend.",
+"C) Design choices that emphasize security over usability.",
+"D) Features that enhance user privacy and control."],
+answer:"B) UI elements intentionally designed to deceive or trick users into actions they did not intend."},
+
+{q:"15. What is the role of 'Dialogue Management' in a conversational AI system?",
+options:["A) To convert spoken language into text.",
+"B) To generate natural-sounding speech from text.",
+"C) To manage the state and flow of the conversation, maintaining context for follow-up questions.",
+"D) To identify the user's intent and extract entities from their query."],
+answer:"C) To manage the state and flow of the conversation, maintaining context for follow-up questions."},
+
+{q:"16. What is the key distinction between Inclusive Design and Accessibility?",
+options:["A) Inclusive Design is a process that considers a full range of human diversity, while Accessibility is the outcome that makes a product usable by people with disabilities.",
+"B) Accessibility is a broader concept than Inclusive Design, encompassing all user needs.",
+"C) Inclusive Design focuses only on visual impairments, while Accessibility covers all disabilities.",
+"D) They are two terms for the same concept, used interchangeably."],
+answer:"A) Inclusive Design is a process that considers a full range of human diversity, while Accessibility is the outcome that makes a product usable by people with disabilities."},
+
+{q:"17. Which of the following correctly lists the four phases of the Double Diamond design process model?",
+options:["A) Research, Ideate, Prototype, Launch.",
+"B) Discover, Define, Develop, Deliver.",
+"C) Empathize, Define, Ideate, Test.",
+"D) Plan, Design, Implement, Evaluate."],
+answer:"B) Discover, Define, Develop, Deliver."},
+
+{q:"18. An Empathy Map captures user knowledge in which four quadrants?",
+options:["A) See, Hear, Speak, Do.",
+"B) Says, Thinks, Does, Feels.",
+"C) Goals, Needs, Wants, Frustrations.",
+"D) Likes, Dislikes, Motivations, Barriers."],
+answer:"B) Says, Thinks, Does, Feels."},
+
+{q:"19. What is the primary role of Information Architecture (IA) in interface design?",
+options:["A) To create visually appealing graphic elements.",
+"B) To manage project timelines and budgets.",
+"C) To organize, structure, and label content in a way that helps users find information and complete tasks.",
+"D) To develop the backend code for database management."],
+answer:"C) To organize, structure, and label content in a way that helps users find information and complete tasks."},
+
+{q:"20. According to Miller's Law, what is the approximate number of items an average person can hold in their working memory at one time?",
+options:["A) About 3 (plus or minus 1).",
+"B) About 7 (plus or minus 2).",
+"C) About 10 (plus or minus 3).",
+"D) About 15 (plus or minus 5)."],
+answer:"B) About 7 (plus or minus 2)."},
+
+{q:"21. For which type of studies is 'Expedited Approval' typically available from an IRB?",
+options:["A) Studies involving vulnerable populations with high risk.",
+"B) Studies that pose no more than 'minimal risk' to participants.",
+"C) Studies that involve deception of participants.",
+"D) Studies that require extensive medical interventions."],
+answer:"B) Studies that pose no more than 'minimal risk' to participants."},
+
+{q:"22. What is the significance of 'User Feedback' in the prototyping process?",
+options:["A) It is only collected at the very end of the project to confirm satisfaction.",
+"B) It is the engine of human-centered design, ensuring the final product meets the actual needs and expectations of its audience.",
+"C) It primarily serves to validate the designer's initial assumptions without requiring changes.",
+"D) It is used to determine the final pricing strategy for the product."],
+answer:"B) It is the engine of human-centered design, ensuring the final product meets the actual needs and expectations of its audience."},
+
+{q:"23. How does the HCI-powered solution for detecting academic dishonesty with keystroke dynamics primarily work?",
+options:["A) By analyzing the content of the written text for plagiarism.",
+"B) By capturing key up and key down events and their timestamps to analyze the rhythm and pattern of a person's typing.",
+"C) By monitoring a user's eye movements and facial expressions.",
+"D) By comparing the user's writing style to a database of known authors."],
+answer:"B) By capturing key up and key down events and their timestamps to analyze the rhythm and pattern of a person's typing."},
+
+{q:"24. The lecture discusses the trade-off between plastic and paper straws. What is the core design dilemma highlighted by this example?",
+options:["A) The cost of production for each material.",
+"B) The conflict between immediate user experience (UX) and broader environmental impact.",
+"C) The difficulty in manufacturing aesthetically pleasing paper straws.",
+"D) The preference of consumers for one material over the other regardless of impact."],
+answer:"B) The conflict between immediate user experience (UX) and broader environmental impact."},
+
+{q:"25. According to the lecture, what is the 'Core Mandate' for Socially Responsible AI, specifically regarding MIAs and guiding principles?",
+options:["A) MIAs must prioritize efficiency and speed above all other considerations.",
+"B) MIAs must be able to adapt to user preferences even if it conflicts with ethical guidelines.",
+"C) MIAs must cease functioning immediately if they deviate from their guiding principles until compliance is guaranteed.",
+"D) MIAs should only be used in non-critical applications to avoid ethical dilemmas."],
+answer:"C) MIAs must cease functioning immediately if they deviate from their guiding principles until compliance is guaranteed."},
+
+{q:"26. In the context of the Human-Centered AI for Autism Diagnosis project, what problem did the MSDL-MCA approach primarily solve?",
+options:["A) The lack of computational power for deep learning models.",
+"B) The challenge of collecting large datasets of Indian children's facial expressions for training.",
+"C) The difficulty in integrating speech analysis with facial recognition.",
+"D) The ethical concerns related to using AI for diagnosis."],
+answer:"B) The challenge of collecting large datasets of Indian children's facial expressions for training."},
+
+{q:"27. What is a key characteristic and potential risk of 'Genius Design'?",
+options:["A) It is a highly collaborative process that minimizes individual risk.",
+"B) It is an expert-driven approach that can lead to radical innovation but risks being disconnected from user needs if assumptions are wrong.",
+"C) It relies heavily on extensive user research to validate every design decision.",
+"D) It prioritizes efficiency and performance over user preferences."],
+answer:"B) It is an expert-driven approach that can lead to radical innovation but risks being disconnected from user needs if assumptions are wrong."},
+
+{q:"28. What is the ultimate goal of a designer regarding mental and conceptual models, and what is a common challenge?",
+options:["A) To make the conceptual model as complex as possible; the challenge is user understanding.",
+"B) To align the conceptual model perfectly with the user's mental model; a common challenge is the inevitable trade-off due to constraints.",
+"C) To force users to adapt their mental model to the conceptual model; the challenge is user resistance.",
+"D) To create a conceptual model that is entirely independent of any user mental model; the challenge is innovation."],
+answer:"B) To align the conceptual model perfectly with the user's mental model; a common challenge is the inevitable trade-off due to constraints."},
+
+{q:"29. Which of the following accurately describes the three types of cognitive load discussed in the lecture?",
+options:["A) Visual, Auditory, and Kinesthetic Load.",
+"B) Short-term, Long-term, and Working Memory Load.",
+"C) Intrinsic (inherent task difficulty), Extraneous (wasted effort on confusing design), and Germane (effort for learning) Load.",
+"D) Physical, Emotional, and Mental Load."],
+answer:"C) Intrinsic (inherent task difficulty), Extraneous (wasted effort on confusing design), and Germane (effort for learning) Load."},
+
+{q:"30. What is the primary difference between Vertical and Horizontal Prototyping?",
+options:["A) Vertical prototyping focuses on creating a wide range of features with minimal functionality, while horizontal prototyping builds one feature completely with deep detail.",
+"B) Vertical prototyping focuses on building one feature or function completely with deep detail, while horizontal prototyping shows a wide range of features with superficial functionality.",
+"C) Vertical prototyping is used for low-fidelity designs, while horizontal prototyping is for high-fidelity designs.",
+"D) Vertical prototyping is for mobile apps, while horizontal prototyping is for web applications."],
+answer:"B) Vertical prototyping focuses on building one feature or function completely with deep detail, while horizontal prototyping shows a wide range of features with superficial functionality."}
+
+];
+
+function loadQuiz(){
+    const form = document.getElementById("quizForm");
+
+    questions.forEach((q,i)=>{
+        const div = document.createElement("div");
+        div.className="question";
+
+        div.innerHTML = `<p>${q.q}</p>` +
+        q.options.map(opt =>
+            `<label><input type="radio" name="q${i}" value="${opt}"> ${opt}</label><br>`
+        ).join("");
+
+        form.appendChild(div);
+    });
+}
+
+function submitQuiz(){
+    let score=0;
+    const allQuestions = document.getElementsByClassName("question");
+
+    questions.forEach((q,i)=>{
+        const selected = document.querySelector(`input[name="q${i}"]:checked`);
+        const div = allQuestions[i];
+
+        div.classList.remove("correct","wrong");
+
+        const old = div.querySelector(".correctText");
+        if(old) old.remove();
+
+        if(selected && selected.value===q.answer){
+            score++;
+            div.classList.add("correct");
+        } else {
+            div.classList.add("wrong");
+
+            const p = document.createElement("p");
+            p.className="correctText";
+            p.innerText="Correct Answer: "+q.answer;
+            div.appendChild(p);
+        }
+    });
+
+    document.getElementById("result").innerText = `Score: ${score} / 30`;
+}
+
+loadQuiz();
+
+</script>
+
+</body>
+</html>

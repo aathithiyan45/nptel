@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>HCI Mock Test 5</title>
+
+<style>
+body {
+    font-family: Arial;
+    background: #f4f6f9;
+    padding: 20px;
+}
+h1 {
+    text-align: center;
+}
+.question {
+    background: white;
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+.correct { border-left: 5px solid green; }
+.wrong { border-left: 5px solid red; }
+button {
+    padding: 12px 25px;
+    font-size: 16px;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+#result {
+    margin-top: 20px;
+    font-size: 22px;
+    text-align: center;
+}
+.correctText { color: green; }
+</style>
+
+</head>
+<body>
+
+<h1>HCI Mock Exam 5</h1>
+
+<form id="quizForm"></form>
+
+<div style="text-align:center;">
+    <button type="button" onclick="submitQuiz()">Submit</button>
+</div>
+
+<div id="result"></div>
+
+<script>
+
+const questions = [
+
+{q:"1. What is the primary focus of Human-Computer Interaction (HCI)?",
+options:["A) Developing advanced computer hardware.",
+"B) Understanding and improving the relationship between humans and digital systems.",
+"C) Writing efficient programming code.",
+"D) Marketing digital products."],
+answer:"B) Understanding and improving the relationship between humans and digital systems."},
+
+{q:"2. The case study on detecting academic dishonesty used which specific HCI-related technique?",
+options:["A) Eye-tracking analysis.",
+"B) Keystroke dynamics.",
+"C) Facial recognition.",
+"D) Voice biometrics."],
+answer:"B) Keystroke dynamics."},
+
+{q:"3. Which of the following is considered the foundational layer of a good product, focusing on efficiency, effectiveness, and learnability?",
+options:["A) Customer Experience (CX)",
+"B) User Experience (UX)",
+"C) Usability",
+"D) Interaction Design (IxD)"],
+answer:"C) Usability"},
+
+{q:"4. According to the lecture, what is the primary goal of Human-Centered Design (UCD)?",
+options:["A) To create products that are aesthetically pleasing.",
+"B) To ensure the final product is usable and valuable to the people it's intended for.",
+"C) To develop technology that is cutting-edge.",
+"D) To minimize development costs."],
+answer:"B) To ensure the final product is usable and valuable to the people it's intended for."},
+
+{q:"5. The lecture describes a hierarchy for evaluating a user's relationship with a product and brand. Which option correctly orders this hierarchy from functional to holistic?",
+options:["A) User Experience (UX) -> Usability -> Customer Experience (CX)",
+"B) Usability -> User Experience (UX) -> Customer Experience (CX)",
+"C) Customer Experience (CX) -> User Experience (UX) -> Usability",
+"D) Usability -> Customer Experience (CX) -> User Experience (UX)"],
+answer:"B) Usability -> User Experience (UX) -> Customer Experience (CX)"},
+
+{q:"6. What is a 'Persona' in the context of an HCI project?",
+options:["A) A real user participating in testing.",
+"B) A fictional character representing a key user type.",
+"C) The project manager's alter ego.",
+"D) A legal document outlining user rights."],
+answer:"B) A fictional character representing a key user type."},
+
+{q:"7. In the HCI project workflow, which phase involves developing low-fidelity mock-ups and wireframes to visualize the proposed solution?",
+options:["A) User Research",
+"B) Ideation",
+"C) Prototyping",
+"D) Testing"],
+answer:"C) Prototyping"},
+
+{q:"8. Which of the following is cited as an iconic example of intrusive and unhelpful design, leading to user annoyance?",
+options:["A) Spotify's Playback Controls",
+"B) Microsoft Clippy",
+"C) Lemon in a Mesh Wrap",
+"D) Detergent Bottle with Measuring Cap"],
+answer:"B) Microsoft Clippy"},
+
+{q:"9. The 'Norman Door' is an example of bad design because it:",
+options:["A) Is too heavy to open easily.",
+"B) Lacks clear signifiers, creating conflict between intuition and function.",
+"C) Is made of an unsustainable material.",
+"D) Requires a key to open."],
+answer:"B) Lacks clear signifiers, creating conflict between intuition and function."},
+
+{q:"10. The debate between paper and plastic straws highlights that good design must consider:",
+options:["A) Only the immediate user experience.",
+"B) Only the aesthetic appeal.",
+"C) Its entire lifecycle and broader impact, including environmental.",
+"D) The lowest possible manufacturing cost."],
+answer:"C) Its entire lifecycle and broader impact, including environmental."},
+
+{q:"11. What is the primary difference between a Language Model (LM) and a Large Language Model (LLM)?",
+options:["A) LMs are trained on images, while LLMs are trained on text.",
+"B) LLMs are scaled-up LMs with massive parameters and data, leading to emergent capabilities.",
+"C) LMs can perform complex reasoning, but LLMs cannot.",
+"D) LLMs are only used for translation, while LMs are for text completion."],
+answer:"B) LLMs are scaled-up LMs with massive parameters and data, leading to emergent capabilities."},
+
+{q:"12. The phenomenon where quantitative changes in LLM size and data lead to qualitative leaps in behavior and capability is known as:",
+options:["A) Overfitting",
+"B) Emergence",
+"C) Fine-tuning",
+"D) Transfer learning"],
+answer:"B) Emergence"},
+
+{q:"13. Which prompting technique involves providing a few examples of the task to steer the LLM, enabling 'in-context learning'?",
+options:["A) Zero-Shot Prompting",
+"B) Few-Shot Prompting",
+"C) Instruction Prompting",
+"D) Multimodal Prompting"],
+answer:"B) Few-Shot Prompting"},
+
+{q:"14. What is 'Behavior-Optimized Content'?",
+options:["A) Content designed purely for aesthetic appeal.",
+"B) Content specifically designed to elicit a desired behavioral response.",
+"C) Content that is randomly generated by an LLM.",
+"D) Content that is only visible to a specific demographic."],
+answer:"B) Content specifically designed to elicit a desired behavioral response."},
+
+{q:"15. According to the lecture, what is the 'What, How, Where, When, Whom' problem in influencing behavior?",
+options:["A) The difficulty in translating content into different languages.",
+"B) The challenge of precisely predicting the perfect combination of content, platform, timing, and audience for a desired outcome.",
+"C) The ethical dilemma of using AI for persuasion.",
+"D) The technical challenge of generating diverse content types."],
+answer:"B) The challenge of precisely predicting the perfect combination of content, platform, timing, and audience for a desired outcome."},
+
+{q:"16. The lecture emphasizes that the power to persuade carries a heavy ethical burden. Which of the following is NOT listed as a key ethical consideration?",
+options:["A) Avoiding manipulation",
+"B) Ensuring fairness and non-discrimination",
+"C) Maximizing profit at all costs",
+"D) Protecting user privacy"],
+answer:"C) Maximizing profit at all costs"},
+
+{q:"17. What is the primary purpose of the Kyron Platform?",
+options:["A) To create graphic designs.",
+"B) To provide remote proctoring for exams and virtual interviews.",
+"C) To generate marketing content.",
+"D) To manage project timelines."],
+answer:"B) To provide remote proctoring for exams and virtual interviews."},
+
+{q:"18. Kyron's 'Advanced Plagiarism Check' goes beyond traditional text-matching by analyzing:",
+options:["A) The user's search history.",
+"B) Keystroke patterns and mouse movements.",
+"C) The user's facial expressions.",
+"D) The user's voice tone."],
+answer:"B) Keystroke patterns and mouse movements."},
+
+{q:"19. Which AI tool is demonstrated for iterative text-to-image generation and refinement?",
+options:["A) InVideo",
+"B) Audino",
+"C) Adobe Firefly",
+"D) Turnitin"],
+answer:"C) Adobe Firefly"},
+
+{q:"20. Audino's 'Hate Speech AI' is highlighted for its specialization in analyzing harmful content in which specific linguistic context?",
+options:["A) European languages",
+"B) Indian languages and dialects",
+"C) East Asian languages",
+"D) African languages"],
+answer:"B) Indian languages and dialects"},
+
+{q:"21. In the context of Audino's 'Content AI,' what is the sequence of processes to make long-form video content accessible and searchable?",
+options:["A) LLM Analysis -> Transcription -> Summary",
+"B) Transcription -> LLM Analysis -> Summary",
+"C) Summary -> Transcription -> LLM Analysis",
+"D) LLM Analysis -> Summary -> Transcription"],
+answer:"B) Transcription -> LLM Analysis -> Summary"},
+
+{q:"22. What is 'Privacy by Design'?",
+options:["A) Adding privacy features only after a product is launched.",
+"B) Embedding privacy considerations into the design and architecture of systems from the very beginning.",
+"C) Using privacy settings to restrict user access.",
+"D) Designing products that collect no user data."],
+answer:"B) Embedding privacy considerations into the design and architecture of systems from the very beginning."},
+
+{q:"23. Which of the following is a direct conflict with user-centric design, intentionally tricking users into unintended actions?",
+options:["A) Explainable AI (XAI)",
+"B) Deepfakes",
+"C) Dark Patterns",
+"D) Security by Design"],
+answer:"C) Dark Patterns"},
+
+{q:"24. The ChatGPT demo, where the system provided information about making an atomic bomb after a reframed prompt, highlighted which critical HCI security challenge?",
+options:["A) The system's inability to process natural language.",
+"B) The need for systems to be robust against social engineering and manipulation through prompts.",
+"C) The lack of sufficient training data for LLMs.",
+"D) The difficulty in integrating HCI principles with AI."],
+answer:"B) The need for systems to be robust against social engineering and manipulation through prompts."},
+
+{q:"25. According to the Shannon-Weaver Model, what is the most complex level of communication, asking 'How effectively does the received meaning affect conduct in a desired way?'",
+options:["A) Technical Problem",
+"B) Semantic Problem",
+"C) Effectiveness Problem",
+"D) Encoding Problem"],
+answer:"C) Effectiveness Problem"},
+
+{q:"26. Which of the following is NOT one of the four primary guiding principles for Socially Responsible AI, as discussed in the lecture?",
+options:["A) Human Welfare and Autonomy First",
+"B) Fairness, Equity, and Inclusivity",
+"C) Maximizing AI system uptime",
+"D) Credibility, Accuracy, and Truthfulness"],
+answer:"C) Maximizing AI system uptime"},
+
+{q:"27. The project for autism diagnosis in Indian children faced a challenge due to the lack of large datasets of Indian children's facial expressions. What novel approach was used to overcome this 'scarce data' problem for facial expression recognition?",
+options:["A) Crowdsourcing data from social media.",
+"B) Generating synthetic data using GANs.",
+"C) MSDL-MCA (Multi-Source Domain Learning via Maximal Correlation Analysis).",
+"D) Manual annotation by expert clinicians."],
+answer:"C) MSDL-MCA (Multi-Source Domain Learning via Maximal Correlation Analysis)."},
+
+{q:"28. Which interaction style, coined by Ben Shneiderman, empowers users with continuous visual representation, physical actions, and immediate feedback?",
+options:["A) Instructing",
+"B) Conversing",
+"C) Direct Manipulation",
+"D) Exploring"],
+answer:"C) Direct Manipulation"},
+
+{q:"29. What role does Dialogue Management (DM) play in a conversational system?",
+options:["A) It converts text into speech.",
+"B) It identifies the user's intent from text.",
+"C) It tracks conversation history, decides actions, and determines response content.",
+"D) It translates speech into text."],
+answer:"C) It tracks conversation history, decides actions, and determines response content."},
+
+{q:"30. In the HCI project workflow, what is the primary purpose of moving from Low-Fidelity (Lo-Fi) to High-Fidelity (Hi-Fi) prototyping?",
+options:["A) To reduce the number of user tests required.",
+"B) To allow for rapid, low-cost exploration of ideas before investing in detailed visual design and realistic usability testing.",
+"C) To skip the user research phase entirely.",
+"D) To ensure the product is launched as quickly as possible."],
+answer:"B) To allow for rapid, low-cost exploration of ideas before investing in detailed visual design and realistic usability testing."}
+
+];
+
+function loadQuiz(){
+    const form = document.getElementById("quizForm");
+
+    questions.forEach((q,i)=>{
+        const div = document.createElement("div");
+        div.className="question";
+
+        div.innerHTML = `<p>${q.q}</p>` +
+        q.options.map(opt =>
+            `<label><input type="radio" name="q${i}" value="${opt}"> ${opt}</label><br>`
+        ).join("");
+
+        form.appendChild(div);
+    });
+}
+
+function submitQuiz(){
+    let score=0;
+    const allQuestions = document.getElementsByClassName("question");
+
+    questions.forEach((q,i)=>{
+        const selected = document.querySelector(`input[name="q${i}"]:checked`);
+        const div = allQuestions[i];
+
+        div.classList.remove("correct","wrong");
+
+        const old = div.querySelector(".correctText");
+        if(old) old.remove();
+
+        if(selected && selected.value===q.answer){
+            score++;
+            div.classList.add("correct");
+        } else {
+            div.classList.add("wrong");
+
+            const p = document.createElement("p");
+            p.className="correctText";
+            p.innerText="Correct Answer: "+q.answer;
+            div.appendChild(p);
+        }
+    });
+
+    document.getElementById("result").innerText = `Score: ${score} / 30`;
+}
+
+loadQuiz();
+
+</script>
+
+</body>
+</html>
