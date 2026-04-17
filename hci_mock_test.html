@@ -1,0 +1,1515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NPTEL HCI Mock Test — Week 1 to Week 12</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0e1a;
+    --surface: #111827;
+    --surface2: #1a2235;
+    --border: #1e2d45;
+    --accent: #3b82f6;
+    --accent2: #60a5fa;
+    --accent-glow: rgba(59,130,246,0.18);
+    --green: #22c55e;
+    --green-bg: rgba(34,197,94,0.12);
+    --red: #ef4444;
+    --red-bg: rgba(239,68,68,0.12);
+    --yellow: #f59e0b;
+    --text: #e2e8f0;
+    --text2: #94a3b8;
+    --text3: #64748b;
+    --radius: 14px;
+    --shadow: 0 8px 32px rgba(0,0,0,0.4);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Background grid */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(59,130,246,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(59,130,246,0.04) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ===== SCREENS ===== */
+  .screen { display: none; min-height: 100vh; position: relative; z-index: 1; }
+  .screen.active { display: flex; flex-direction: column; }
+
+  /* ===== START SCREEN ===== */
+  #start-screen {
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+  }
+
+  .start-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    padding: 3rem 3.5rem;
+    max-width: 560px;
+    width: 100%;
+    box-shadow: var(--shadow), 0 0 80px rgba(59,130,246,0.08);
+    animation: fadeUp 0.6s ease;
+  }
+
+  .logo-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--accent-glow);
+    border: 1px solid rgba(59,130,246,0.3);
+    border-radius: 999px;
+    padding: 6px 16px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--accent2);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+  }
+
+  .start-card h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: 2.1rem;
+    font-weight: 800;
+    line-height: 1.15;
+    margin-bottom: 0.75rem;
+    background: linear-gradient(135deg, #e2e8f0 0%, var(--accent2) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .start-card p { color: var(--text2); line-height: 1.6; margin-bottom: 2rem; font-size: 0.95rem; }
+
+  .info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 2rem;
+  }
+
+  .info-item {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 16px;
+  }
+
+  .info-item .label { font-size: 0.72rem; color: var(--text3); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px; }
+  .info-item .value { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1.1rem; color: var(--accent2); }
+
+  .btn-primary {
+    width: 100%;
+    padding: 1rem;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius);
+    font-family: 'Syne', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.02em;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-primary::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.15), transparent);
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(59,130,246,0.4); }
+  .btn-primary:hover::after { opacity: 1; }
+  .btn-primary:active { transform: translateY(0); }
+
+  .resume-note { text-align: center; margin-top: 1rem; font-size: 0.82rem; color: var(--text3); }
+  .resume-note span { color: var(--yellow); }
+
+  /* ===== EXAM SCREEN ===== */
+  #exam-screen { flex-direction: row; height: 100vh; overflow: hidden; }
+
+  /* Sidebar */
+  .sidebar {
+    width: 280px;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+  }
+
+  .sidebar-header {
+    padding: 1.25rem 1.25rem 1rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .sidebar-header h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--text2);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 0.75rem;
+  }
+
+  /* Timer */
+  .timer-box {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 0.75rem;
+  }
+
+  .timer-icon { font-size: 1.1rem; }
+  .timer-display {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: var(--accent2);
+    letter-spacing: 0.05em;
+    flex: 1;
+  }
+
+  .timer-display.warning { color: var(--yellow); animation: pulse 1s infinite; }
+  .timer-display.danger { color: var(--red); animation: pulse 0.5s infinite; }
+
+  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.6; } }
+
+  /* Progress */
+  .progress-info { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+  .progress-label { font-size: 0.78rem; color: var(--text3); }
+  .progress-count { font-size: 0.78rem; font-weight: 600; color: var(--accent2); }
+
+  .progress-bar {
+    height: 5px;
+    background: var(--border);
+    border-radius: 999px;
+    overflow: hidden;
+    margin-bottom: 1rem;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    border-radius: 999px;
+    transition: width 0.4s ease;
+  }
+
+  /* Legend */
+  .legend { display: flex; gap: 8px; flex-wrap: wrap; }
+  .legend-item { display: flex; align-items: center; gap: 4px; font-size: 0.7rem; color: var(--text3); }
+  .legend-dot { width: 8px; height: 8px; border-radius: 2px; }
+  .legend-dot.answered { background: var(--green); }
+  .legend-dot.current { background: var(--accent); }
+  .legend-dot.unanswered { background: var(--border); }
+
+  /* Palette */
+  .palette-container {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1rem 1.25rem;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+  }
+
+  .week-label {
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text3);
+    margin: 12px 0 6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .week-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .palette-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 5px;
+    margin-bottom: 4px;
+  }
+
+  .palette-btn {
+    aspect-ratio: 1;
+    border: 1.5px solid var(--border);
+    background: transparent;
+    border-radius: 6px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--text3);
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: 'Syne', sans-serif;
+  }
+
+  .palette-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .palette-btn.answered { background: var(--green-bg); border-color: var(--green); color: var(--green); }
+  .palette-btn.current { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+  /* Submit btn in sidebar */
+  .sidebar-footer {
+    padding: 1rem 1.25rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .btn-submit {
+    width: 100%;
+    padding: 0.85rem;
+    background: linear-gradient(135deg, #22c55e, #16a34a);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius);
+    font-family: 'Syne', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.02em;
+  }
+
+  .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(34,197,94,0.35); }
+
+  /* Main exam area */
+  .exam-main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .exam-topbar {
+    padding: 1rem 2rem;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--surface);
+    flex-shrink: 0;
+  }
+
+  .topbar-left { display: flex; align-items: center; gap: 12px; }
+  .menu-toggle {
+    display: none;
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--text2);
+    border-radius: 8px;
+    width: 36px; height: 36px;
+    cursor: pointer;
+    font-size: 1rem;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .week-badge {
+    background: var(--accent-glow);
+    border: 1px solid rgba(59,130,246,0.3);
+    border-radius: 6px;
+    padding: 4px 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--accent2);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .q-position {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--text2);
+  }
+
+  .exam-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 2.5rem 3rem;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+  }
+
+  .question-card {
+    max-width: 760px;
+    margin: 0 auto;
+    animation: fadeUp 0.35s ease;
+  }
+
+  .q-number {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--text3);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 1rem;
+  }
+
+  .q-text {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.15rem;
+    font-weight: 600;
+    line-height: 1.6;
+    color: var(--text);
+    margin-bottom: 2rem;
+  }
+
+  .options-list { display: flex; flex-direction: column; gap: 12px; }
+
+  .option-btn {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 1rem 1.25rem;
+    background: var(--surface2);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: left;
+    width: 100%;
+    color: var(--text);
+  }
+
+  .option-btn:hover:not(.selected):not(.correct):not(.wrong) {
+    border-color: rgba(59,130,246,0.4);
+    background: rgba(59,130,246,0.06);
+  }
+
+  .option-letter {
+    min-width: 30px;
+    height: 30px;
+    background: var(--border);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Syne', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--text2);
+    transition: all 0.2s;
+    flex-shrink: 0;
+  }
+
+  .option-text { font-size: 0.95rem; line-height: 1.5; padding-top: 3px; }
+
+  .option-btn.selected {
+    border-color: var(--accent);
+    background: var(--accent-glow);
+  }
+
+  .option-btn.selected .option-letter {
+    background: var(--accent);
+    color: #fff;
+  }
+
+  .option-btn.correct {
+    border-color: var(--green);
+    background: var(--green-bg);
+  }
+
+  .option-btn.correct .option-letter {
+    background: var(--green);
+    color: #fff;
+  }
+
+  .option-btn.wrong {
+    border-color: var(--red);
+    background: var(--red-bg);
+  }
+
+  .option-btn.wrong .option-letter {
+    background: var(--red);
+    color: #fff;
+  }
+
+  .option-btn.reveal-correct {
+    border-color: var(--green);
+    background: var(--green-bg);
+    opacity: 0.8;
+  }
+
+  .option-btn.reveal-correct .option-letter {
+    background: var(--green);
+    color: #fff;
+  }
+
+  /* Nav buttons */
+  .exam-nav {
+    padding: 1.25rem 3rem;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--surface);
+    flex-shrink: 0;
+  }
+
+  .btn-nav {
+    padding: 0.75rem 1.75rem;
+    border-radius: var(--radius);
+    font-family: 'Syne', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 1.5px solid var(--border);
+    background: transparent;
+    color: var(--text2);
+    letter-spacing: 0.02em;
+  }
+
+  .btn-nav:hover { border-color: var(--accent); color: var(--accent); }
+  .btn-nav:disabled { opacity: 0.3; cursor: not-allowed; }
+  .btn-nav.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .btn-nav.primary:hover { box-shadow: 0 4px 16px rgba(59,130,246,0.4); transform: translateY(-1px); }
+
+  .answered-count {
+    font-size: 0.82rem;
+    color: var(--text3);
+  }
+
+  .answered-count strong { color: var(--text2); }
+
+  /* ===== RESULT SCREEN ===== */
+  #result-screen {
+    align-items: center;
+    justify-content: flex-start;
+    padding: 2rem;
+    overflow-y: auto;
+  }
+
+  .result-wrapper {
+    max-width: 900px;
+    width: 100%;
+    margin: 0 auto;
+    animation: fadeUp 0.5s ease;
+  }
+
+  .result-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+  }
+
+  .result-icon { font-size: 3.5rem; margin-bottom: 1rem; }
+
+  .result-header h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: 2.2rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+    background: linear-gradient(135deg, #e2e8f0, var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .result-header p { color: var(--text2); font-size: 0.95rem; }
+
+  .score-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 12px;
+    margin-bottom: 2rem;
+  }
+
+  .score-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.25rem;
+    text-align: center;
+  }
+
+  .score-card .sc-value {
+    font-family: 'Syne', sans-serif;
+    font-size: 2rem;
+    font-weight: 800;
+    margin-bottom: 4px;
+  }
+
+  .score-card .sc-label { font-size: 0.78rem; color: var(--text3); text-transform: uppercase; letter-spacing: 0.05em; }
+  .score-card.highlight { border-color: var(--accent); background: var(--accent-glow); }
+  .score-card.highlight .sc-value { color: var(--accent2); }
+  .score-card.green .sc-value { color: var(--green); }
+  .score-card.red .sc-value { color: var(--red); }
+
+  /* Score ring */
+  .score-ring-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 2rem;
+  }
+
+  .score-ring {
+    position: relative;
+    width: 140px;
+    height: 140px;
+  }
+
+  .score-ring svg { transform: rotate(-90deg); }
+  .score-ring circle { fill: none; stroke-width: 10; }
+  .ring-bg { stroke: var(--border); }
+  .ring-fill { stroke: var(--accent); stroke-linecap: round; transition: stroke-dashoffset 1s ease; }
+
+  .ring-text {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ring-pct {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: var(--text);
+  }
+
+  .ring-sub { font-size: 0.68rem; color: var(--text3); text-transform: uppercase; letter-spacing: 0.05em; }
+
+  /* Review */
+  .review-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+  }
+
+  .review-header h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+  }
+
+  .review-filters { display: flex; gap: 8px; }
+
+  .filter-btn {
+    padding: 5px 14px;
+    border-radius: 999px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    border: 1.5px solid var(--border);
+    background: transparent;
+    color: var(--text3);
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .filter-btn.active { border-color: var(--accent); color: var(--accent); background: var(--accent-glow); }
+
+  .review-list { display: flex; flex-direction: column; gap: 16px; margin-bottom: 2rem; }
+
+  .review-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.25rem 1.5rem;
+    transition: border-color 0.2s;
+  }
+
+  .review-item.correct-item { border-left: 3px solid var(--green); }
+  .review-item.wrong-item { border-left: 3px solid var(--red); }
+  .review-item.skipped-item { border-left: 3px solid var(--text3); }
+
+  .review-q-meta { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .review-q-num { font-size: 0.72rem; font-weight: 600; color: var(--text3); text-transform: uppercase; }
+
+  .status-badge {
+    font-size: 0.68rem;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .status-badge.correct { background: var(--green-bg); color: var(--green); }
+  .status-badge.wrong { background: var(--red-bg); color: var(--red); }
+  .status-badge.skipped { background: rgba(100,116,139,0.15); color: var(--text3); }
+
+  .review-q-text {
+    font-size: 0.92rem;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 10px;
+    line-height: 1.5;
+  }
+
+  .review-answers { display: flex; flex-direction: column; gap: 5px; }
+
+  .review-ans {
+    font-size: 0.83rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    color: var(--text2);
+    line-height: 1.4;
+  }
+
+  .review-ans .ans-label { font-weight: 600; flex-shrink: 0; font-size: 0.75rem; text-transform: uppercase; }
+  .review-ans.your-ans .ans-label { color: var(--red); }
+  .review-ans.correct-ans .ans-label { color: var(--green); }
+  .review-ans.skipped-ans .ans-label { color: var(--text3); }
+
+  .result-actions { display: flex; gap: 12px; justify-content: center; margin-bottom: 2rem; }
+
+  .btn-outline {
+    padding: 0.8rem 2rem;
+    border: 1.5px solid var(--border);
+    background: transparent;
+    color: var(--text2);
+    border-radius: var(--radius);
+    font-family: 'Syne', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.02em;
+  }
+
+  .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* Modal */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    backdrop-filter: blur(6px);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .modal-overlay.active { display: flex; }
+
+  .modal {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 2.5rem;
+    max-width: 420px;
+    width: 90%;
+    box-shadow: var(--shadow);
+    animation: fadeUp 0.3s ease;
+    text-align: center;
+  }
+
+  .modal-icon { font-size: 2.5rem; margin-bottom: 1rem; }
+  .modal h2 { font-family: 'Syne', sans-serif; font-size: 1.4rem; font-weight: 800; margin-bottom: 0.75rem; }
+  .modal p { color: var(--text2); line-height: 1.6; margin-bottom: 1.75rem; font-size: 0.92rem; }
+
+  .modal-btns { display: flex; gap: 12px; justify-content: center; }
+
+  .btn-cancel {
+    padding: 0.75rem 1.5rem;
+    border: 1.5px solid var(--border);
+    background: transparent;
+    color: var(--text2);
+    border-radius: var(--radius);
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+  }
+
+  .btn-cancel:hover { border-color: var(--text2); }
+
+  .btn-confirm {
+    padding: 0.75rem 1.5rem;
+    background: var(--green);
+    border: none;
+    color: #fff;
+    border-radius: var(--radius);
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+  }
+
+  .btn-confirm:hover { box-shadow: 0 4px 16px rgba(34,197,94,0.4); transform: translateY(-1px); }
+
+  /* Sidebar overlay for mobile */
+  .sidebar-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    z-index: 90;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 768px) {
+    #exam-screen { position: relative; }
+
+    .sidebar {
+      position: fixed;
+      top: 0; left: 0; bottom: 0;
+      z-index: 100;
+      transform: translateX(-100%);
+      width: 260px;
+    }
+
+    .sidebar.open { transform: translateX(0); }
+    .sidebar-overlay { display: block; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
+    .sidebar-overlay.active { opacity: 1; pointer-events: all; }
+
+    .menu-toggle { display: flex; }
+
+    .exam-content { padding: 1.5rem 1.25rem; }
+    .exam-nav { padding: 1rem 1.25rem; }
+    .exam-topbar { padding: 0.75rem 1.25rem; }
+
+    .q-text { font-size: 1rem; }
+
+    .btn-nav { padding: 0.7rem 1.25rem; font-size: 0.83rem; }
+
+    .start-card { padding: 2rem 1.5rem; }
+    .start-card h1 { font-size: 1.6rem; }
+
+    .result-actions { flex-direction: column; align-items: center; }
+    .score-cards { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== START SCREEN ===== -->
+<div id="start-screen" class="screen active">
+  <div class="start-card">
+    <div class="logo-badge">📚 NPTEL</div>
+    <h1>Human Computer Interaction</h1>
+    <p>A full-length mock test covering all 12 weeks of the NPTEL HCI course. 120 questions · 2 hour timer · Instant results.</p>
+    <div class="info-grid">
+      <div class="info-item">
+        <div class="label">Questions</div>
+        <div class="value">120</div>
+      </div>
+      <div class="info-item">
+        <div class="label">Duration</div>
+        <div class="value">2 Hours</div>
+      </div>
+      <div class="info-item">
+        <div class="label">Weeks</div>
+        <div class="value">1 – 12</div>
+      </div>
+      <div class="info-item">
+        <div class="label">Marks Each</div>
+        <div class="value">1 Mark</div>
+      </div>
+    </div>
+    <button class="btn-primary" onclick="startTest()">🚀 Start Test</button>
+    <div class="resume-note" id="resume-note" style="display:none;">
+      <span>⚡ Saved progress found.</span> Click Start to resume.
+    </div>
+  </div>
+</div>
+
+<!-- ===== EXAM SCREEN ===== -->
+<div id="exam-screen" class="screen">
+
+  <!-- Sidebar overlay (mobile) -->
+  <div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <h2>Question Palette</h2>
+      <div class="timer-box">
+        <span class="timer-icon">⏱</span>
+        <div class="timer-display" id="timer-display">02:00:00</div>
+      </div>
+      <div class="progress-info">
+        <span class="progress-label">Progress</span>
+        <span class="progress-count" id="progress-text">0 / 120</span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progress-fill" style="width:0%"></div>
+      </div>
+      <div class="legend">
+        <div class="legend-item"><div class="legend-dot answered"></div> Answered</div>
+        <div class="legend-item"><div class="legend-dot current"></div> Current</div>
+        <div class="legend-item"><div class="legend-dot unanswered"></div> Not answered</div>
+      </div>
+    </div>
+    <div class="palette-container" id="palette-container">
+      <!-- Generated by JS -->
+    </div>
+    <div class="sidebar-footer">
+      <button class="btn-submit" onclick="confirmSubmit()">✓ Submit Test</button>
+    </div>
+  </aside>
+
+  <!-- Main content -->
+  <main class="exam-main">
+    <div class="exam-topbar">
+      <div class="topbar-left">
+        <button class="menu-toggle" id="menu-toggle" onclick="toggleSidebar()">☰</button>
+        <span class="week-badge" id="week-badge">Week 1</span>
+      </div>
+      <span class="q-position" id="q-position">Q 1 of 120</span>
+    </div>
+
+    <div class="exam-content">
+      <div class="question-card" id="question-card">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+
+    <div class="exam-nav">
+      <button class="btn-nav" id="prev-btn" onclick="navigate(-1)" disabled>← Previous</button>
+      <span class="answered-count">Answered: <strong id="answered-count">0</strong> / 120</span>
+      <button class="btn-nav primary" id="next-btn" onclick="navigate(1)">Next →</button>
+    </div>
+  </main>
+</div>
+
+<!-- ===== RESULT SCREEN ===== -->
+<div id="result-screen" class="screen">
+  <div class="result-wrapper">
+    <div class="result-header">
+      <div class="result-icon" id="result-icon">🎉</div>
+      <h1 id="result-title">Test Complete!</h1>
+      <p id="result-subtitle">Here's your performance breakdown</p>
+    </div>
+
+    <div class="score-ring-wrap">
+      <div class="score-ring">
+        <svg viewBox="0 0 140 140" width="140" height="140">
+          <circle class="ring-bg" cx="70" cy="70" r="60"/>
+          <circle class="ring-fill" id="ring-fill" cx="70" cy="70" r="60"
+            stroke-dasharray="376.99"
+            stroke-dashoffset="376.99"/>
+        </svg>
+        <div class="ring-text">
+          <div class="ring-pct" id="ring-pct">0%</div>
+          <div class="ring-sub">Score</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="score-cards">
+      <div class="score-card highlight">
+        <div class="sc-value" id="sc-total">0/120</div>
+        <div class="sc-label">Total Score</div>
+      </div>
+      <div class="score-card green">
+        <div class="sc-value" id="sc-correct">0</div>
+        <div class="sc-label">Correct</div>
+      </div>
+      <div class="score-card red">
+        <div class="sc-value" id="sc-wrong">0</div>
+        <div class="sc-label">Wrong</div>
+      </div>
+      <div class="score-card">
+        <div class="sc-value" id="sc-skipped">0</div>
+        <div class="sc-label">Skipped</div>
+      </div>
+    </div>
+
+    <div class="result-actions">
+      <button class="btn-primary" onclick="startTest(true)" style="max-width:220px;">🔄 Retake Test</button>
+      <button class="btn-outline" onclick="scrollToReview()">📋 Review Answers</button>
+    </div>
+
+    <div id="review-section">
+      <div class="review-header">
+        <h2>Answer Review</h2>
+        <div class="review-filters">
+          <button class="filter-btn active" onclick="setFilter('all', this)">All</button>
+          <button class="filter-btn" onclick="setFilter('wrong', this)">Wrong</button>
+          <button class="filter-btn" onclick="setFilter('correct', this)">Correct</button>
+          <button class="filter-btn" onclick="setFilter('skipped', this)">Skipped</button>
+        </div>
+      </div>
+      <div class="review-list" id="review-list">
+        <!-- Generated by JS -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Confirm Submit Modal -->
+<div class="modal-overlay" id="submit-modal">
+  <div class="modal">
+    <div class="modal-icon">📝</div>
+    <h2>Submit Test?</h2>
+    <p id="modal-body">Are you sure you want to submit? You can review your answers after submission.</p>
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeModal()">Keep Going</button>
+      <button class="btn-confirm" onclick="submitTest()">Submit Now</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ===================================================
+// QUESTION DATA — All 120 questions from the PDF
+// ===================================================
+const QUESTIONS = [
+  // WEEK 1
+  { week: 1, question: "What is a common characteristic of good design?", options: ["Complex to use", "Innovative and solves a problem", "Lacks accessibility", "Focuses on aesthetics only"], answer: "Innovative and solves a problem" },
+  { week: 1, question: "What is a key principle of accessibility in design?", options: ["Usability only for experienced users", "Designing for the broadest range of users", "Focusing on technical details", "Prioritizing aesthetics over functionality"], answer: "Designing for the broadest range of users" },
+  { week: 1, question: 'What does "inclusive design" aim to achieve?', options: ["Exclusivity for niche markets", "Accessibility for all users, regardless of abilities", "Simpler designs for advanced users only", "Removal of visual aesthetics"], answer: "Accessibility for all users, regardless of abilities" },
+  { week: 1, question: "What is the purpose of continuous iteration in design?", options: ["To finish designs quickly", "To adapt to user feedback and changing needs", "To reduce innovation", "To create designs without testing"], answer: "To adapt to user feedback and changing needs" },
+  { week: 1, question: 'What does the "elegant simplicity" principle emphasize in design?', options: ["Removing accessibility features", "Simplifying complex solutions to create robust experiences", "Focusing only on visual appeal", "Avoiding innovation"], answer: "Simplifying complex solutions to create robust experiences" },
+  { week: 1, question: "What is the primary goal of user-centered design?", options: ["To prioritize business objectives over user needs", "To focus entirely on aesthetics", "To create designs that meet user needs and expectations", "To reduce costs at the expense of usability"], answer: "To create designs that meet user needs and expectations" },
+  { week: 1, question: "What is the importance of consistency in design?", options: ["To improve visual appeal without considering usability", "To allow users to build familiarity and reduce cognitive load", "To frequently change layouts for user engagement", "To focus only on advanced user requirements"], answer: "To allow users to build familiarity and reduce cognitive load" },
+  { week: 1, question: "What is the role of affordances in interface design?", options: ["To make the interface more visually appealing", "To indicate how users can interact with a design element", "To hide unnecessary features from users", "To reduce the number of actionable options"], answer: "To indicate how users can interact with a design element" },
+  { week: 1, question: "Why is feedback essential in design?", options: ["To guide users about the results of their actions", "To restrict user actions", "To enhance the design's aesthetic value", "To replace usability testing"], answer: "To guide users about the results of their actions" },
+  { week: 1, question: "What does scalability in design ensure?", options: ["Designs are compatible with different screen sizes and devices", "The interface looks identical on all platforms", "The system is only functional on high-end devices", "There are no accessibility features included"], answer: "Designs are compatible with different screen sizes and devices" },
+
+  // WEEK 2
+  { week: 2, question: "Which principle ensures users can easily find essential controls in an interface?", options: ["Feedback", "Affordance", "Visibility", "Consistency"], answer: "Visibility" },
+  { week: 2, question: "What does feedback in HCI design mean?", options: ["Removing redundant options for the user", "Communicating the system's status after a user action", "Consistently placing controls in a familiar location", "Designing for visual impairments"], answer: "Communicating the system's status after a user action" },
+  { week: 2, question: "What is an example of affordance in design?", options: ["Colorblind mode in games", "A volume slider that visually suggests dragging", "Using captions in videos", "High contrast themes for readability"], answer: "A volume slider that visually suggests dragging" },
+  { week: 2, question: "Which feature exemplifies the principle of constraints?", options: ["Adjustable desks in offices", "Password fields preventing submission until criteria are met", "Keyboard shortcuts for email navigation", "Localized language support on websites"], answer: "Password fields preventing submission until criteria are met" },
+  { week: 2, question: "What is an example of consistency in design?", options: ["High contrast themes in software", 'Consistent placement of the "Back" button across screens', "Screen readers for visually impaired users", "Buttons that visually indicate they are clickable"], answer: 'Consistent placement of the "Back" button across screens' },
+  { week: 2, question: "Which principle ensures users understand what actions are possible in a design?", options: ["Affordance", "Feedback", "Constraints", "Visibility"], answer: "Affordance" },
+  { week: 2, question: "What is an example of visibility in design?", options: ["A tooltip appearing when hovering over a button", "A button changing color after being clicked", "A password field hiding characters as dots", "A hidden menu requiring a gesture to reveal"], answer: "A tooltip appearing when hovering over a button" },
+  { week: 2, question: "Which principle ensures error prevention by guiding user actions?", options: ["Affordance", "Constraints", "Feedback", "Consistency"], answer: "Constraints" },
+  { week: 2, question: "What type of feedback is provided when a file upload progress bar is displayed?", options: ["Visual feedback", "Haptic feedback", "Audio feedback", "Contextual feedback"], answer: "Visual feedback" },
+  { week: 2, question: 'Which is an example of mismatch with the principle of consistency?', options: ['Placing the "Next" button in different locations on each screen', "Using the same icons for similar actions across the interface", "Applying a uniform color scheme throughout the app", 'Labeling the "Back" button as "Previous" consistently'], answer: 'Placing the "Next" button in different locations on each screen' },
+
+  // WEEK 3
+  { week: 3, question: "What is Interaction Design (IxD)?", options: ["The study of website aesthetics", "Designing user-product interactions to be intuitive and efficient", "A marketing strategy for digital products", "Coding software to enhance system performance"], answer: "Designing user-product interactions to be intuitive and efficient" },
+  { week: 3, question: 'What does "affordance" in design refer to?', options: ["Minimizing cognitive load", "Simulating actions inspired by real-world interactions", "Making interactive systems visually appealing", "Designing consistent user interfaces"], answer: "Simulating actions inspired by real-world interactions" },
+  { week: 3, question: 'What does the "Define" stage in the Double Diamond process involve?', options: ["Brainstorming creative ideas", "Developing prototypes", "Creating a clear design challenge brief", "Testing user feedback"], answer: "Creating a clear design challenge brief" },
+  { week: 3, question: "Which activity comes first in user-centered design?", options: ["Prototyping alternative designs", "Observing user behavior and needs", "Iterative refinement based on feedback", "Conducting surveys for marketing insights"], answer: "Observing user behavior and needs" },
+  { week: 3, question: "What is an example of consistency in design?", options: ["High contrast themes in software", 'Consistent placement of the "Back" button across screens', "Screen readers for visually impaired users", "Buttons that visually indicate they are clickable"], answer: 'Consistent placement of the "Back" button across screens' },
+  { week: 3, question: "What is the primary goal of Interaction Design (IxD)?", options: ["To improve software development speed", "To create meaningful and seamless interactions between users and products", "To replace user testing with design heuristics", "To focus solely on visual aesthetics"], answer: "To create meaningful and seamless interactions between users and products" },
+  { week: 3, question: 'What does the term "feedback" refer to in Interaction Design?', options: ["User reviews about the product", "System responses to user actions", "A design iteration process", "Evaluation by stakeholders"], answer: "System responses to user actions" },
+  { week: 3, question: "Which principle of Interaction Design helps users predict outcomes of their actions?", options: ["Affordance", "Consistency", "Feedback", "Signifiers"], answer: "Signifiers" },
+  { week: 3, question: 'What happens during the "Develop" phase in the Double Diamond process?', options: ["Generating broad ideas and exploring possibilities", "Refining and prototyping solutions", "Conducting user research to identify challenges", "Testing the final product with users"], answer: "Refining and prototyping solutions" },
+  { week: 3, question: 'What is an example of a "signifier" in a design?', options: ['A button labeled "Submit" indicating its function', "A decorative icon with no functionality", "A high-resolution image used as a background", "A complex dropdown menu"], answer: 'A button labeled "Submit" indicating its function' },
+
+  // WEEK 4
+  { week: 4, question: "What is the primary purpose of creating personas?", options: ["To generate user feedback", "To empathize with users and understand their needs", "To test prototypes with real users", "To replace usability testing"], answer: "To empathize with users and understand their needs" },
+  { week: 4, question: "What is a mental model?", options: ["A high-level representation of a product's functionality", "A user's expectations of how something should work", "A blueprint for designing user interfaces", "A theoretical framework for usability testing"], answer: "A user's expectations of how something should work" },
+  { week: 4, question: "What is NOT included in a user persona template?", options: ["Demographics", "Picture", "Company profit margins", "Goals and needs"], answer: "Company profit margins" },
+  { week: 4, question: "When are personas most commonly developed?", options: ["During the Ideate phase of design thinking", "During the Prototype phase", "During the Define phase", "During the Testing phase"], answer: "During the Define phase" },
+  { week: 4, question: "What should you avoid when designing a persona?", options: ["Using real data to support patterns", "Including stereotypes", "Listing pain points and frustrations", "Identifying goals and needs"], answer: "Including stereotypes" },
+  { week: 4, question: "Why are personas valuable in the design process?", options: ["They eliminate the need for user research", "They provide insights into user behaviors and preferences", "They dictate exact design specifications", "They replace the need for prototypes"], answer: "They provide insights into user behaviors and preferences" },
+  { week: 4, question: "What is a key characteristic of an effective persona?", options: ["Based on assumptions", "Focused on a single real user", "Derived from user research and data analysis", "Highly generic to cover a broad audience"], answer: "Derived from user research and data analysis" },
+  { week: 4, question: "Which of the following is typically included in a persona's description?", options: ["Technology proficiency level", "Business goals for the company", "Manufacturing costs of the product", "Statistical analysis reports"], answer: "Technology proficiency level" },
+  { week: 4, question: "What is the primary limitation of personas?", options: ["They are too detailed for practical use", "They may oversimplify diverse user needs if not well-researched", "They are only useful for marketing purposes", "They require every user to be directly involved"], answer: "They may oversimplify diverse user needs if not well-researched" },
+  { week: 4, question: "How can personas improve team collaboration?", options: ["By replacing technical requirements documents", "By serving as a shared reference point for user-centric decisions", "By focusing only on design teams", "By reducing the importance of user feedback"], answer: "By serving as a shared reference point for user-centric decisions" },
+
+  // WEEK 5
+  { week: 5, question: "What is cognition?", options: ["The ability to perform physical tasks", "The human brain's process of handling information", "A method to design computer systems", "A measure of mental energy"], answer: "The human brain's process of handling information" },
+  { week: 5, question: "Which principle ensures related items are grouped together in UX design?", options: ["Law of Continuity", "Law of Proximity", "Law of Common Region", "Chunking"], answer: "Law of Proximity" },
+  { week: 5, question: "What helps reduce cognitive load in design?", options: ["Adding animations and symbols", "Increasing navigation steps", "Organizing information", "Using multiple fonts and colors"], answer: "Organizing information" },
+  { week: 5, question: "Recognition is easier than recall because it relies on:", options: ["Abstract reasoning", "Familiarity with options", "Extensive memory storage", "Guesswork"], answer: "Familiarity with options" },
+  { week: 5, question: "Which cognitive process involves interpreting sensory input?", options: ["Memory", "Perception", "Decision-making", "Problem-solving"], answer: "Perception" },
+  { week: 5, question: "What is the primary focus of cognitive psychology?", options: ["The study of physical brain structures", "Understanding mental processes like memory, attention, and problem-solving", "Exploring human emotions and social behaviors", "Designing artificial intelligence systems"], answer: "Understanding mental processes like memory, attention, and problem-solving" },
+  { week: 5, question: "What is the key benefit of chunking in cognitive design?", options: ["It eliminates the need for memory recall", "It simplifies information by breaking it into manageable groups", "It increases the complexity of navigation", "It enhances creative thinking"], answer: "It simplifies information by breaking it into manageable groups" },
+  { week: 5, question: "Which principle is used to guide user attention in design?", options: ["Law of Similarity", "Visual Hierarchy", "Mental Models", "Cognitive Dissonance"], answer: "Visual Hierarchy" },
+  { week: 5, question: "What is selective attention?", options: ["The ability to focus on a single task while ignoring distractions", "Remembering specific details from a large dataset", "Dividing focus equally across multiple tasks", "Randomly switching between different stimuli"], answer: "The ability to focus on a single task while ignoring distractions" },
+  { week: 5, question: 'What does the term "working memory" refer to?', options: ["Long-term storage of information", "The system for temporarily holding and processing information", "A permanent memory recall process", "Automatic decision-making based on experience"], answer: "The system for temporarily holding and processing information" },
+
+  // WEEK 6
+  { week: 6, question: "What is a questionnaire?", options: ["A tool used for statistical analysis", "A set of structured questions for systematic data collection", "A visual representation of qualitative data", "A predefined coding scheme for data analysis"], answer: "A set of structured questions for systematic data collection" },
+  { week: 6, question: "What is an advantage of closed-ended questions?", options: ["They provide rich, descriptive data", "They are easier to analyze quantitatively", "They encourage creative responses", "They eliminate the need for coding"], answer: "They are easier to analyze quantitatively" },
+  { week: 6, question: "What does a Likert scale measure?", options: ["Satisfaction levels", "Percentage distributions", "Frequency of occurrences", "Task completion times"], answer: "Satisfaction levels" },
+  { week: 6, question: "What is a between-group design?", options: ["Each participant experiences all designs", "Participants compare designs with their baseline score", "Each participant is exposed to only one design", "There are no control groups included"], answer: "Each participant is exposed to only one design" },
+  { week: 6, question: "Why is cross-checking findings with multiple methods essential in data analysis?", options: ["To simplify the data analysis process", "To avoid the need for inductive analysis", "To increase reliability and reduce bias", "To tailor results for specific user groups"], answer: "To increase reliability and reduce bias" },
+  { week: 6, question: "What is the main purpose of a pilot study in research?", options: ["To collect final data", "To test the feasibility and reliability of the research design", "To validate statistical tools", "To analyze all variables simultaneously"], answer: "To test the feasibility and reliability of the research design" },
+  { week: 6, question: "What is an open-ended question designed to do?", options: ["Limit the participant's response to predefined options", "Encourage detailed and qualitative responses", "Standardize data collection for analysis", "Restrict creative input from participants"], answer: "Encourage detailed and qualitative responses" },
+  { week: 6, question: "Which sampling method ensures every individual has an equal chance of being selected?", options: ["Convenience sampling", "Random sampling", "Snowball sampling", "Quota sampling"], answer: "Random sampling" },
+  { week: 6, question: "What does a demographic question in a survey typically ask about?", options: ["Participant opinions on specific topics", "Participants' personal characteristics like age, gender, or income", "Preferences for a particular design", "Performance on experimental tasks"], answer: "Participants' personal characteristics like age, gender, or income" },
+  { week: 6, question: "Why are neutral questions important in a questionnaire?", options: ["To reduce participant response bias", "To simplify data collection", "To avoid statistical anomalies", "To ensure short and concise responses"], answer: "To reduce participant response bias" },
+
+  // WEEK 7
+  { week: 7, question: "What is a prototype in HCI?", options: ["A final version of the product", "A representation of a conceptual design for interaction", "A manufacturing process", "A set of programming scripts"], answer: "A representation of a conceptual design for interaction" },
+  { week: 7, question: "Which of the following is NOT a type of prototyping?", options: ["Low Fidelity", "Medium Fidelity", "High Fidelity", "Advanced Fidelity"], answer: "Advanced Fidelity" },
+  { week: 7, question: "Low-fidelity prototypes are commonly created using:", options: ["Advanced design software", "Paper and pencil or basic tools", "Real-time interaction platforms", "Complex 3D modeling tools"], answer: "Paper and pencil or basic tools" },
+  { week: 7, question: "A clickable wireframe used for testing interactions is an example of:", options: ["Low Fidelity Prototype", "Medium Fidelity Prototype", "High Fidelity Prototype", "Final Product"], answer: "Medium Fidelity Prototype" },
+  { week: 7, question: "Which of the following best differentiates low and high-fidelity prototypes?", options: ["The amount of user feedback they generate", "The level of interactivity and detail involved", "Their ability to test user navigation", "The tools required for their creation"], answer: "The level of interactivity and detail involved" },
+  { week: 7, question: "What is the primary goal of prototyping in HCI?", options: ["To finalize the product design", "To gather user feedback and validate design concepts", "To increase production speed", "To minimize testing requirements"], answer: "To gather user feedback and validate design concepts" },
+  { week: 7, question: "Which tool is commonly used for high-fidelity prototyping?", options: ["Paper and pencil", "Adobe XD or Figma", "Sticky notes and markers", "Basic spreadsheet software"], answer: "Adobe XD or Figma" },
+  { week: 7, question: "When is it most appropriate to use low-fidelity prototyping?", options: ["During the final stages of development", "To test core design ideas quickly and cost-effectively", "When simulating realistic user interactions", "For debugging code-based interactions"], answer: "To test core design ideas quickly and cost-effectively" },
+  { week: 7, question: "What is a key characteristic of a high-fidelity prototype?", options: ["Simple, static visuals", "Fully interactive with realistic visuals and functionality", "Minimal design details", "Focus on overall concept without user interaction"], answer: "Fully interactive with realistic visuals and functionality" },
+  { week: 7, question: "Why might a designer prefer a medium-fidelity prototype over a low-fidelity one?", options: ["To quickly sketch out basic ideas", "To balance detail and interactivity without full development", "To skip user testing phases", "To reduce design complexity"], answer: "To balance detail and interactivity without full development" },
+
+  // WEEK 8
+  { week: 8, question: "What is the primary purpose of usability testing?", options: ["To finalize the system design", "To evaluate user interaction with the system", "To create user personas", "To develop advanced prototypes"], answer: "To evaluate user interaction with the system" },
+  { week: 8, question: 'What does "think-aloud protocol" involve in usability testing?', options: ["Users describing their thoughts while interacting with the system", "Observers documenting user actions silently", "Interviewing users after testing", "Running automated scripts for data collection"], answer: "Users describing their thoughts while interacting with the system" },
+  { week: 8, question: "Which is an ethical requirement in usability testing?", options: ["Ensuring participants finish all tasks", "Providing clear informed consent", "Avoiding the use of incentives", "Conducting tests in secret"], answer: "Providing clear informed consent" },
+  { week: 8, question: "How is user preference typically measured?", options: ["By recording task completion times", "By asking users to rate the system or choose among statements", "By counting the number of errors", "By observing user behavior during tests"], answer: "By asking users to rate the system or choose among statements" },
+  { week: 8, question: "Why are redundant questions sometimes used in usability testing?", options: ["To extend the length of the survey", "To confuse the participants", "To confirm the reliability of responses", "To avoid collecting unnecessary data"], answer: "To confirm the reliability of responses" },
+  { week: 8, question: "What is the primary goal of a usability test?", options: ["To ensure the system meets user needs", "To test the system's security features", "To evaluate hardware specifications", "To create marketing materials"], answer: "To ensure the system meets user needs" },
+  { week: 8, question: "Which method is commonly used to observe users during usability testing?", options: ["Heatmap analysis", "Eye-tracking technology", "A/B testing", "Logarithmic scaling"], answer: "Eye-tracking technology" },
+  { week: 8, question: "What is a key benefit of conducting usability testing early in the design process?", options: ["To increase system functionality", "To identify and fix usability issues before full development", "To avoid collecting user feedback", "To speed up product launch without further revisions"], answer: "To identify and fix usability issues before full development" },
+  { week: 8, question: "Which of the following is an objective metric in usability testing?", options: ["User satisfaction ratings", "Task completion time", "Written feedback from participants", "Preferences for interface colors"], answer: "Task completion time" },
+  { week: 8, question: "What is the purpose of using personas in usability testing?", options: ["To generalize user feedback", "To represent different types of users and their needs", "To reduce the number of test participants", "To replace test users in testing"], answer: "To represent different types of users and their needs" },
+
+  // WEEK 9
+  { week: 9, question: "Which of the following best defines Human-Computer Interaction (HCI)?", options: ["Designing computer hardware", "Creating effective user interfaces for digital systems", "Writing machine learning algorithms", "Manufacturing IoT devices"], answer: "Creating effective user interfaces for digital systems" },
+  { week: 9, question: "What is the primary purpose of IoT devices?", options: ["To replace traditional computers", "To enable seamless connectivity and data exchange between devices", "To reduce power consumption in devices", "To improve cybersecurity"], answer: "To enable seamless connectivity and data exchange between devices" },
+  { week: 9, question: "Which of the following is NOT an example of IoT?", options: ["Smart thermostat", "Fitness tracker", "Personal computer with no internet connection", "Smart home security camera"], answer: "Personal computer with no internet connection" },
+  { week: 9, question: "How does HCI enhance IoT applications?", options: ["By ensuring devices are connected to the internet", "By designing interfaces that improve usability and accessibility", "By increasing battery life of IoT devices", "By reducing manufacturing costs"], answer: "By designing interfaces that improve usability and accessibility" },
+  { week: 9, question: "What is a key design consideration for IoT interfaces in HCI?", options: ["Complex navigation menus", "Minimal user control", "Intuitive and context-aware interactions", "High reliance on technical expertise"], answer: "Intuitive and context-aware interactions" },
+  { week: 9, question: "What is a key benefit of integrating HCI principles into IoT systems?", options: ["Improved device durability", "Enhanced user experience and satisfaction", "Increased data storage capacity", "Reduced internet usage"], answer: "Enhanced user experience and satisfaction" },
+  { week: 9, question: "Which of the following is an essential feature of a smart IoT device?", options: ["Manual data processing", "Connectivity to other devices or the internet", "Absence of user interaction", "High electricity consumption"], answer: "Connectivity to other devices or the internet" },
+  { week: 9, question: "What role does user feedback play in designing HCI for IoT systems?", options: ["It reduces the need for updates", "It helps improve usability and device functionality", "It eliminates the need for testing", "It only applies to non-IoT systems"], answer: "It helps improve usability and device functionality" },
+  { week: 9, question: "How can HCI contribute to the accessibility of IoT devices?", options: ["By creating devices that require technical expertise", "By designing interfaces for diverse user needs, such as voice or touch control", "By limiting features to basic functions", "By focusing solely on aesthetic design"], answer: "By designing interfaces for diverse user needs, such as voice or touch control" },
+  { week: 9, question: "What is an example of context-aware interaction in IoT systems?", options: ["A fitness tracker suggesting workouts based on user activity history", "A smart TV displaying only static menus", "A thermostat requiring manual temperature adjustments at all times", "A refrigerator with no internet connection"], answer: "A fitness tracker suggesting workouts based on user activity history" },
+
+  // WEEK 10
+  { week: 10, question: "What does an LLM primarily aim to do?", options: ["Solve mathematical problems", "Generate and understand text", "Process only numerical data", "Translate images into animations"], answer: "Generate and understand text" },
+  { week: 10, question: "What significant transition marks the evolution from a Language Model (LM) to a Large Language Model (LLM)?", options: ["Increase in parameter count and adaptability", "Inclusion of new vocabulary only", "Use of a different programming language", "Limited application to simple tasks"], answer: "Increase in parameter count and adaptability" },
+  { week: 10, question: "What technique in prompting provides examples to improve model performance?", options: ["Zero-shot prompting", "Few-shot prompting", "Reinforcement prompting", "Task-specific prompting"], answer: "Few-shot prompting" },
+  { week: 10, question: "How does a transformer-based LLM encode input sequence positions?", options: ["Using feed-forward neural networks", "Using positional encoding", "Using decoder layers", "Using recurrent connections"], answer: "Using positional encoding" },
+  { week: 10, question: "What is a key application of LLMs in adaptive learning systems?", options: ["Simplifying test papers", "Generating personalized learning materials", "Reducing system latency", "Automating attendance tracking"], answer: "Generating personalized learning materials" },
+  { week: 10, question: "What mechanism allows LLMs to focus on specific parts of input data during processing?", options: ["Convolutional layers", "Attention mechanism", "Gradient descent", "Hyperparameter tuning"], answer: "Attention mechanism" },
+  { week: 10, question: "What is the primary advantage of fine-tuning an LLM for a specific domain?", options: ["Reducing the size of the model", "Adapting the model to perform better on domain-specific tasks", "Eliminating the need for training data", "Increasing training time significantly"], answer: "Adapting the model to perform better on domain-specific tasks" },
+  { week: 10, question: "Which architecture forms the backbone of most modern LLMs?", options: ["Transformer architecture", "Recurrent Neural Network (RNN)", "Convolutional Neural Network (CNN)", "Decision Tree"], answer: "Transformer architecture" },
+  { week: 10, question: "How do LLMs handle out-of-vocabulary words during text generation?", options: ["By skipping them entirely", "By using subword tokenization methods like Byte Pair Encoding (BPE)", "By replacing them with random tokens", "By converting them into numerical indices directly"], answer: "By using subword tokenization methods like Byte Pair Encoding (BPE)" },
+  { week: 10, question: 'What does "context window" refer to in an LLM?', options: ["The number of output tokens generated", "The amount of training data used", "The fixed size of input tokens the model can process at a time", "The time taken for model training"], answer: "The fixed size of input tokens the model can process at a time" },
+
+  // WEEK 11
+  { week: 11, question: "What is the primary goal of privacy in HCI?", options: ["Limiting user interactions", "Protecting user trust and control over personal data", "Preventing interface customization", "Increasing data collection"], answer: "Protecting user trust and control over personal data" },
+  { week: 11, question: "What does WhatsApp use to secure user messages?", options: ["Plain text storage", "End-to-end encryption", "Firewall protection", "Biometric authentication"], answer: "End-to-end encryption" },
+  { week: 11, question: "What does GDPR require websites to provide?", options: ["Mandatory user accounts", "Clear privacy policies and consent mechanisms", "Automatic data sharing", "Fixed cookie preferences"], answer: "Clear privacy policies and consent mechanisms" },
+  { week: 11, question: "What is a common privacy tool in web design?", options: ["Encryption software", "Cookie consent managers", "Firewalls", "Antivirus software"], answer: "Cookie consent managers" },
+  { week: 11, question: "Why is security important in HCI?", options: ["To ensure quicker user interactions", "To protect users from threats like data breaches and fraud", "To complicate user experience", "To remove transparency from interfaces"], answer: "To protect users from threats like data breaches and fraud" },
+  { week: 11, question: "What is the purpose of two-factor authentication in security?", options: ["To simplify login processes", "To provide an additional layer of protection beyond passwords", "To eliminate password usage entirely", "To enable faster access to accounts"], answer: "To provide an additional layer of protection beyond passwords" },
+  { week: 11, question: "What is the primary function of a Virtual Private Network (VPN)?", options: ["Speed up internet connections", "Securely encrypt and route user data through private servers", "Prevent website customization", "Replace antivirus software"], answer: "Securely encrypt and route user data through private servers" },
+  { week: 11, question: 'What does the term "data minimization" refer to in privacy practices?', options: ["Collecting only essential data needed for specific purposes", "Maximizing the amount of user data collected", "Storing all user data indefinitely", "Eliminating data collection completely"], answer: "Collecting only essential data needed for specific purposes" },
+  { week: 11, question: "How does biometric authentication improve user security?", options: ["By requiring users to remember complex passwords", "By using unique physical traits like fingerprints or facial recognition", "By sharing login credentials with multiple devices", "By storing passwords in plain text"], answer: "By using unique physical traits like fingerprints or facial recognition" },
+  { week: 11, question: "What is the role of a privacy impact assessment (PIA) in system design?", options: ["To evaluate potential risks to user privacy before implementation", "To increase the speed of software development", "To remove user consent requirements", "To enhance system performance metrics"], answer: "To evaluate potential risks to user privacy before implementation" },
+
+  // WEEK 12
+  { week: 12, question: "What is a key feature of conversational systems?", options: ["Natural Language Understanding (NLU)", "Static text-based interactions", "Manual configuration for every query", "Non-adaptive learning"], answer: "Natural Language Understanding (NLU)" },
+  { week: 12, question: "What is the main benefit of conversational AI in customer support?", options: ["24/7 availability", "Eliminates human interaction", "Provides complex legal advice", "Replaces customer service entirely"], answer: "24/7 availability" },
+  { week: 12, question: "What is the primary challenge of AI in conversational systems?", options: ["Lack of scalability", "Bias in training data", "Limited use cases", "No security risks"], answer: "Bias in training data" },
+  { week: 12, question: "Which feature enhances search efficiency in conversational AI?", options: ["Manual query generation", "NLP-based search suggestions", "Static keyword matching", "Visual-only interactions"], answer: "NLP-based search suggestions" },
+  { week: 12, question: 'What does "Explainable AI" focus on?', options: ["Replacing humans in decision-making", "Making AI's decision process transparent", "Limiting user input", "Using AI for static tasks"], answer: "Making AI's decision process transparent" },
+  { week: 12, question: "What is a key advantage of using conversational AI for businesses?", options: ["Reduced operational costs", "Increased manual workload", "Dependency on static scripts", "Limited scalability"], answer: "Reduced operational costs" },
+  { week: 12, question: "What enables conversational AI to understand user intent?", options: ["Pre-programmed templates", "Natural Language Processing (NLP)", "Static response generation", "Rule-based automation only"], answer: "Natural Language Processing (NLP)" },
+  { week: 12, question: "Which factor is critical for improving conversational AI over time?", options: ["Static programming", "Continuous learning from user interactions", "Limiting data inputs", "Avoiding user feedback"], answer: "Continuous learning from user interactions" },
+  { week: 12, question: "What is one potential limitation of conversational AI systems?", options: ["Inability to understand context accurately", "24/7 availability", "Automating repetitive tasks", "Real-time language translation"], answer: "Inability to understand context accurately" },
+  { week: 12, question: "Which technology is most commonly integrated with conversational AI for voice-based systems?", options: ["Text-only chat", "Automatic Speech Recognition (ASR)", "Manual response scripts", "Visual input analysis"], answer: "Automatic Speech Recognition (ASR)" }
+];
+
+// ===================================================
+// STATE
+// ===================================================
+const TOTAL = QUESTIONS.length;      // 120
+const TIMER_SECONDS = 7200;          // 2 hours
+const LS_KEY = 'hci_mock_state';
+
+let state = {
+  current: 0,           // current question index
+  answers: new Array(TOTAL).fill(null),
+  timeLeft: TIMER_SECONDS,
+  submitted: false,
+  startTime: null
+};
+
+let timerInterval = null;
+let reviewFilter = 'all';
+
+// ===================================================
+// INIT
+// ===================================================
+window.addEventListener('DOMContentLoaded', () => {
+  // Check for saved state
+  const saved = loadState();
+  if (saved && !saved.submitted) {
+    document.getElementById('resume-note').style.display = 'block';
+    state = saved;
+  }
+});
+
+// ===================================================
+// START / RESET
+// ===================================================
+function startTest(reset = false) {
+  if (reset) {
+    clearState();
+    state = {
+      current: 0,
+      answers: new Array(TOTAL).fill(null),
+      timeLeft: TIMER_SECONDS,
+      submitted: false,
+      startTime: Date.now()
+    };
+  } else {
+    state.startTime = Date.now();
+  }
+
+  showScreen('exam-screen');
+  buildPalette();
+  renderQuestion();
+  startTimer();
+}
+
+// ===================================================
+// SCREENS
+// ===================================================
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+// ===================================================
+// TIMER
+// ===================================================
+function startTimer() {
+  clearInterval(timerInterval);
+  updateTimerUI();
+  timerInterval = setInterval(() => {
+    state.timeLeft--;
+    saveState();
+    updateTimerUI();
+    if (state.timeLeft <= 0) {
+      clearInterval(timerInterval);
+      submitTest(true);
+    }
+  }, 1000);
+}
+
+function updateTimerUI() {
+  const h = Math.floor(state.timeLeft / 3600);
+  const m = Math.floor((state.timeLeft % 3600) / 60);
+  const s = state.timeLeft % 60;
+  const display = `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+  const el = document.getElementById('timer-display');
+  el.textContent = display;
+  el.className = 'timer-display';
+  if (state.timeLeft <= 300) el.classList.add('danger');
+  else if (state.timeLeft <= 600) el.classList.add('warning');
+}
+
+// ===================================================
+// PALETTE BUILDER
+// ===================================================
+function buildPalette() {
+  const container = document.getElementById('palette-container');
+  container.innerHTML = '';
+
+  let currentWeek = 0;
+  let grid = null;
+
+  QUESTIONS.forEach((q, i) => {
+    if (q.week !== currentWeek) {
+      currentWeek = q.week;
+      // Week label
+      const label = document.createElement('div');
+      label.className = 'week-label';
+      label.textContent = `Week ${currentWeek}`;
+      container.appendChild(label);
+      // New grid
+      grid = document.createElement('div');
+      grid.className = 'palette-grid';
+      container.appendChild(grid);
+    }
+    const btn = document.createElement('button');
+    btn.className = 'palette-btn';
+    btn.id = `pal-${i}`;
+    btn.textContent = i + 1;
+    btn.onclick = () => { goTo(i); if (window.innerWidth <= 768) closeSidebar(); };
+    grid.appendChild(btn);
+  });
+
+  updatePalette();
+}
+
+function updatePalette() {
+  QUESTIONS.forEach((_, i) => {
+    const btn = document.getElementById(`pal-${i}`);
+    if (!btn) return;
+    btn.className = 'palette-btn';
+    if (i === state.current) btn.classList.add('current');
+    else if (state.answers[i] !== null) btn.classList.add('answered');
+  });
+}
+
+// ===================================================
+// RENDER QUESTION
+// ===================================================
+function renderQuestion() {
+  const q = QUESTIONS[state.current];
+  const answered = state.answers.filter(a => a !== null).length;
+
+  // Topbar
+  document.getElementById('week-badge').textContent = `Week ${q.week}`;
+  document.getElementById('q-position').textContent = `Q ${state.current + 1} of ${TOTAL}`;
+
+  // Progress
+  const pct = ((state.current + 1) / TOTAL) * 100;
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('progress-text').textContent = `${state.current + 1} / ${TOTAL}`;
+  document.getElementById('answered-count').textContent = answered;
+
+  // Nav buttons
+  document.getElementById('prev-btn').disabled = state.current === 0;
+  const nextBtn = document.getElementById('next-btn');
+  if (state.current === TOTAL - 1) {
+    nextBtn.textContent = 'Submit →';
+    nextBtn.onclick = confirmSubmit;
+  } else {
+    nextBtn.textContent = 'Next →';
+    nextBtn.onclick = () => navigate(1);
+  }
+
+  // Question card
+  const letters = ['A', 'B', 'C', 'D'];
+  const card = document.getElementById('question-card');
+  card.innerHTML = `
+    <div class="q-number">Question ${state.current + 1} &nbsp;·&nbsp; Week ${q.week}</div>
+    <div class="q-text">${q.question}</div>
+    <div class="options-list">
+      ${q.options.map((opt, i) => `
+        <button class="option-btn ${state.answers[state.current] === opt ? 'selected' : ''}"
+          onclick="selectOption('${escapeStr(opt)}')">
+          <span class="option-letter">${letters[i]}</span>
+          <span class="option-text">${opt}</span>
+        </button>
+      `).join('')}
+    </div>
+  `;
+
+  updatePalette();
+
+  // Scroll palette to show current button
+  const palBtn = document.getElementById(`pal-${state.current}`);
+  if (palBtn) palBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function escapeStr(str) {
+  return str.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+}
+
+// ===================================================
+// SELECT OPTION
+// ===================================================
+function selectOption(opt) {
+  if (state.submitted) return;
+  state.answers[state.current] = opt;
+  saveState();
+  renderQuestion();
+}
+
+// ===================================================
+// NAVIGATION
+// ===================================================
+function navigate(dir) {
+  const next = state.current + dir;
+  if (next < 0 || next >= TOTAL) return;
+  state.current = next;
+  renderQuestion();
+}
+
+function goTo(idx) {
+  state.current = idx;
+  renderQuestion();
+}
+
+// ===================================================
+// SUBMIT FLOW
+// ===================================================
+function confirmSubmit() {
+  const answered = state.answers.filter(a => a !== null).length;
+  const unanswered = TOTAL - answered;
+  const modal = document.getElementById('submit-modal');
+  const body = document.getElementById('modal-body');
+  body.textContent = unanswered > 0
+    ? `You have ${unanswered} unanswered question${unanswered > 1 ? 's' : ''}. Once submitted, you cannot change your answers.`
+    : `All ${TOTAL} questions answered. Once submitted, you cannot change your answers.`;
+  modal.classList.add('active');
+}
+
+function closeModal() {
+  document.getElementById('submit-modal').classList.remove('active');
+}
+
+function submitTest(autoSubmit = false) {
+  if (state.submitted) return;
+  closeModal();
+  clearInterval(timerInterval);
+  state.submitted = true;
+  saveState();
+  showResults();
+}
+
+// ===================================================
+// RESULTS
+// ===================================================
+function showResults() {
+  let correct = 0, wrong = 0, skipped = 0;
+  QUESTIONS.forEach((q, i) => {
+    if (state.answers[i] === null) skipped++;
+    else if (state.answers[i] === q.answer) correct++;
+    else wrong++;
+  });
+
+  const pct = Math.round((correct / TOTAL) * 100);
+
+  document.getElementById('sc-total').textContent = `${correct}/120`;
+  document.getElementById('sc-correct').textContent = correct;
+  document.getElementById('sc-wrong').textContent = wrong;
+  document.getElementById('sc-skipped').textContent = skipped;
+  document.getElementById('ring-pct').textContent = pct + '%';
+
+  // Ring animation
+  const circumference = 376.99;
+  const offset = circumference - (pct / 100) * circumference;
+  setTimeout(() => {
+    document.getElementById('ring-fill').style.strokeDashoffset = offset;
+    if (pct >= 60) document.getElementById('ring-fill').style.stroke = 'var(--green)';
+    else if (pct >= 40) document.getElementById('ring-fill').style.stroke = 'var(--yellow)';
+    else document.getElementById('ring-fill').style.stroke = 'var(--red)';
+  }, 300);
+
+  // Result message
+  const icon = pct >= 75 ? '🏆' : pct >= 50 ? '👏' : '📚';
+  const title = pct >= 75 ? 'Excellent Work!' : pct >= 50 ? 'Good Effort!' : 'Keep Practicing!';
+  document.getElementById('result-icon').textContent = icon;
+  document.getElementById('result-title').textContent = title;
+  document.getElementById('result-subtitle').textContent = `You scored ${correct} out of 120 (${pct}%)`;
+
+  buildReview('all');
+  showScreen('result-screen');
+  clearState();
+}
+
+// ===================================================
+// REVIEW
+// ===================================================
+function buildReview(filter) {
+  reviewFilter = filter;
+  const list = document.getElementById('review-list');
+  list.innerHTML = '';
+
+  QUESTIONS.forEach((q, i) => {
+    const userAns = state.answers[i];
+    const isCorrect = userAns === q.answer;
+    const isSkipped = userAns === null;
+    const status = isSkipped ? 'skipped' : isCorrect ? 'correct' : 'wrong';
+
+    if (filter !== 'all' && filter !== status) return;
+
+    const item = document.createElement('div');
+    item.className = `review-item ${status}-item`;
+
+    item.innerHTML = `
+      <div class="review-q-meta">
+        <span class="review-q-num">Q${i + 1} · Week ${q.week}</span>
+        <span class="status-badge ${status}">${status.charAt(0).toUpperCase() + status.slice(1)}</span>
+      </div>
+      <div class="review-q-text">${q.question}</div>
+      <div class="review-answers">
+        ${isSkipped
+          ? `<div class="review-ans skipped-ans"><span class="ans-label">Skipped</span> <span>—</span></div>
+             <div class="review-ans correct-ans"><span class="ans-label">Correct</span> <span>${q.answer}</span></div>`
+          : isCorrect
+          ? `<div class="review-ans correct-ans"><span class="ans-label">Your Answer</span> <span>${userAns}</span></div>`
+          : `<div class="review-ans your-ans"><span class="ans-label">Your Answer</span> <span>${userAns}</span></div>
+             <div class="review-ans correct-ans"><span class="ans-label">Correct Answer</span> <span>${q.answer}</span></div>`
+        }
+      </div>
+    `;
+    list.appendChild(item);
+  });
+}
+
+function setFilter(filter, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  buildReview(filter);
+}
+
+function scrollToReview() {
+  document.getElementById('review-section').scrollIntoView({ behavior: 'smooth' });
+}
+
+// ===================================================
+// SIDEBAR (mobile)
+// ===================================================
+function toggleSidebar() {
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('sidebar-overlay');
+  sidebar.classList.toggle('open');
+  overlay.classList.toggle('active');
+}
+
+function closeSidebar() {
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sidebar-overlay').classList.remove('active');
+}
+
+// ===================================================
+// LOCAL STORAGE
+// ===================================================
+function saveState() {
+  try { localStorage.setItem(LS_KEY, JSON.stringify(state)); } catch(e) {}
+}
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem(LS_KEY);
+    return raw ? JSON.parse(raw) : null;
+  } catch(e) { return null; }
+}
+
+function clearState() {
+  try { localStorage.removeItem(LS_KEY); } catch(e) {}
+}
+</script>
+</body>
+</html>
